@@ -1,0 +1,2 @@
+gcc -c -g -I/home/cs360/include -Isrc/ -fno-builtin src/f2.c  src/f2.o src/shell.o
+gcc -c -g -I/home/cs360/include -Isrc/ -fno-builtin src/shell.c -o src/shell.o  src/f2.o src/shell.o
