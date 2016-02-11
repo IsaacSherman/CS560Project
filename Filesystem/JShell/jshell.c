@@ -8,6 +8,8 @@
 #include <string.h>
 Shell globalJShell=NULL;
 extern killZombies();
+extern void exit(int);
+
 void
 exitCleanup(void){
 		killZombies(globalJShell);

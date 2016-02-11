@@ -5,11 +5,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <malloc.h>
+//#include <sys/wait.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
 #include "myLib.h"
 #include <assert.h>
+
 Shell 
 newShell(char * prompt){//creates a new shell with objects
 	Shell ret;
@@ -82,7 +84,74 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	int i, words = S->input->NF;
 	*cmd = strdup(S->input->fields[0]);
 	int special = false;
+	/*
+	these are the commands we need to parse, with declarations in the style of C:
+	Also, strings are char *, it looks like all of our files will be text
+	void mkfs(void)
+	fd open (string filename, char flag) where
+		flag is either r or w
+	string read (int fd, size) 
+		fd is the file descriptor
+		size is the number of bytes to read- and the amount to increase offset
+	void write (int fd, string text)
+	void seek (int fd, int offset)
+	void close(int fd)
+	void mkdir (string dirname)
+	void rmdir (string dirname)
+	void cd (string dirname)
+	void * ls (void) no params!
+	string cat (string filename)
+	string tree (void) 
+	import (string src, string dest)
+	export (string src, string dest)
+	*/
+	if(strcmp(*cmd, "mkfs") == 0) {
+	printf("mkfs\n");
+	//make file system
+	}
+	else if (strcmp(*cmd, "read") == 0){
+	//read, 
+	printf("read\n");
+	}
+	else if (strcmp(*cmd, "open") == 0){
+	//open, 
+	}
+	else if (strcmp(*cmd, "write") == 0){
+	//write, 
+	}
+	else if (strcmp(*cmd, "seek") == 0){
+	//seek, 
+	}
+	else if (strcmp(*cmd, "close") == 0){
+	//close, 
+	}
+	else if (strcmp(*cmd, "mkdir") == 0){
+	//mkdir, 
+	}
+	else if (strcmp(*cmd, "rmdir") == 0){
+	//rmdir, 
+	}
+	else if (strcmp(*cmd, "cd") == 0){
+	//cd, 
+	}
+	else if (strcmp(*cmd, "ls") == 0){
+	//ls, 
+	}
+	else if (strcmp(*cmd, "tree") == 0){
+	//tree, 
+	}
+	else if (strcmp(*cmd, "import") == 0){
+	//import, 
+	}
+	else if (strcmp(*cmd, "export") == 0){
+	//export, 
+	}
+	else{
+	printf("Invalid option: %s", *cmd);
+	}
+	
 	for(i = 0; i < words; i++){
+
 		(*argv)[i] = strdup((S->input->fields[i]));
 		if((*argv)[i][0]=='>' || (*argv)[i][0]=='<' ||(*argv)[i][0]=='|' ) special = true;  
 		printf("argv[%d] = %s\n", i, (*argv)[i]);

@@ -1,6 +1,8 @@
 #ifndef __ISHERMANS_LIB__
 #define __ISHERMANS_LIB__
 
+extern void free(void *);
+
 #define SafeFree(ToFree) { free(ToFree); ToFree = NULL;}//ensures it won't get freed again
 #define true 1
 #define false 0
