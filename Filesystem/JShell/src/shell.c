@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include "myLib.h"
 #include <assert.h>
 Shell 
@@ -221,7 +222,7 @@ redirect(Shell S, int mode, char * file, char ** argv){
 	int fd1;
 	if(mode == 1){
 		struct stat buf;
-		int err = stat(file, buf);
+		int err = stat(file, &buf);
 		if(err != -1) {
 			fprintf(stderr, "%s already exists.\n", file);
 			exit(1);
