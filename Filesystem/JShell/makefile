@@ -1,18 +1,18 @@
 # CS360 Class Manager
 # August 29, 2005
 CC = gcc
-CLASSDIR = /home/huangj/cs360
-CDIR = /home/cs360
+
 MYLIB = src/
-INCLUDE = $(CDIR)/include -I$(MYLIB)
+INCLUDE = -I$(MYLIB)
 OTHER = $(wildcard $(MYLIB)*.c)
 SOURCE = $(wildcard *.c)
 ALLC = $(OTHER) $(SOURCE)
 COMPS = $(subst .c,.o, $(OTHER))
 OBJECTS =  $(subst .c,.o, $(OTHER)) $(subst .c,.o, $(SOURCE))
 EXECUTABLES = $(basename $(SOURCE))
-CFLAGS =  -g -I$(INCLUDE) -fno-builtin
-LIB = $(CDIR)/pub/libfdr.a
+CFLAGS =  -g $(INCLUDE)
+LIB = 
+# $(CDIR)/pub/libfdr.a
 all: $(OBJECTS) $(EXECUTABLES)
 	echo ALL:
 test: 
