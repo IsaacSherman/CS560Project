@@ -1,9 +1,7 @@
-# CS360 Class Manager
-# August 29, 2005
 CC = gcc
 
 MYLIB = src/
-INCLUDE = -I$(MYLIB)
+INCLUDE = -I $(MYLIB) -Ilibfdr/
 OTHER = $(wildcard $(MYLIB)*.c)
 SOURCE = $(wildcard *.c)
 ALLC = $(OTHER) $(SOURCE)
@@ -11,10 +9,9 @@ COMPS = $(subst .c,.o, $(OTHER))
 OBJECTS =  $(subst .c,.o, $(OTHER)) $(subst .c,.o, $(SOURCE))
 EXECUTABLES = $(basename $(SOURCE))
 CFLAGS =  -g $(INCLUDE)
-LIB = 
-# $(CDIR)/pub/libfdr.a
+LIB = libfdr/libfdr.a
 all: $(OBJECTS) $(EXECUTABLES)
-	echo ALL:
+	echo ALL: $(OBJECTS) $(EXECUTABLES)
 test: 
 	echo Comps == $(COMPS)
 	echo oBjects = $(OBJECTS)
@@ -30,9 +27,9 @@ $(EXECUTABLES) : $(LIB) $(OBJECTS)
 #.SUFFIXES: .c .o .a
 
 $(ALLC) : $(LIB)
-	$(CC) -c $(CFLAGS) $*.c -o $(basename $@).o $(COMPS)
+	$(CC) $(CFLAGS) -c $@ -o $(basename $@).o 
 	echo ALLC: $@
-	$(CC) -c $(CFLAGS) $@ $(COMPS)
+	$(CC) -c $(CFLAGS) $@
 
 #lib/f1.o:
 #	$(CC) $(CFLAGS) $(basename $@).c -o $@ $(LIB)

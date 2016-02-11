@@ -16,8 +16,14 @@ exitCleanup(void){
 void
 cntl_c_handler(int dummy)
 {
-	//fprintf(stderr, "Caught signal 11\n");
-	    //signal(11, cntl_c_handler);
+	/*static int once = 0;
+	printf("once = %d", once);
+	if(!once++){
+	fprintf(stderr, "Caught signal 11\n");
+	    exit(dummy);
+		signal(11, cntl_c_handler);
+	}*/
+	exit(1);
 }
 
 int

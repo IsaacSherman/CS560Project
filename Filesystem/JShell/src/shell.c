@@ -77,13 +77,15 @@ shouldWait(Shell jsh){//returns true or false
 
 int
 parseCommand(Shell S, char ** cmd, char *** argv){
+
 	int i, words = S->input->NF;
 	*cmd = strdup(S->input->fields[0]);
 	int special = false;
 	for(i = 0; i < words; i++){
 		(*argv)[i] = strdup((S->input->fields[i]));
 		if((*argv)[i][0]=='>' || (*argv)[i][0]=='<' ||(*argv)[i][0]=='|' ) special = true;  
-	}
+		printf("argv[%d] = %s\n", i, (*argv)[i]);
+		}
 	argv[i] = NULL;
 	return special;
 }
