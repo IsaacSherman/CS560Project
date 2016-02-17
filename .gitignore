@@ -43,4 +43,4 @@ Temporary Items
 .apdisk
 
 # Files from compile
-.o
+*.o
