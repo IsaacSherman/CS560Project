@@ -15,8 +15,8 @@
 
 #include <stdbool.h>
 
-#define F true
-#define D false
+#define F true						// Used to identify Files
+#define D false						// Used to identify Directories
 #define DEFAULT_FS_SIZE 104857600	// 100 MB
 #define DEFAULT_PAGE_SIZE 4096		// 4 KB
 
