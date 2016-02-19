@@ -15,8 +15,8 @@
 
 #include <stdbool.h>
 
-#define F true						// Used to identify Files
-#define D false						// Used to identify Directories
+#define F false						// Used to identify Files
+#define D true						// Used to identify Directories
 #define DEFAULT_FS_SIZE 104857600	// 100 MB
 #define DEFAULT_PAGE_SIZE 4096		// 4 KB
 
@@ -30,8 +30,8 @@ typedef enum Level_tag {
 typedef struct Inode_tag {
 	char *name;				// Text name of the file/directory
 	int tag;				// Numerical identifier of file/directory
-	bool itype;				// Type - file/directory
-	int size;				// Size in bytes
+	char itype;				// Type - file/directory
+	int size;				// Files: size in bytes; Directories: number of children
 	Level_e levels;			// Levels of indirection to data
 	struct Inode_tag **children;	// Pointer to array of child directories and files 	[0] - points to itself
 									//													[1] - points to its parent
@@ -43,7 +43,7 @@ typedef struct FS_tag {
 	int page_size;		// Page size of the file system in bytes
 	int header_size;	// Header size of file system metadata - includes inode information
 	int num_inodes;		// Total number of inodes present in the FS (will be at least 1)
-	bool *free_list;	// Boolean list of free FS pages
+	char *free_list;	// Boolean list of free FS pages
 	Inode_t *root;		// Pointer to the root directory in the FS
 } FS_t;
 

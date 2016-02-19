@@ -11,10 +11,14 @@
 
 
 
-FS_t mkfs();
+#include <stdio.h>
+
+FS_t mkfs(char *);
+void dsfs(FS_t *);
 FS_t create_fs();
+FS_t open_fs(FILE *);
 Inode_t *create_inode(char *, int);
-FS_t open_fs(char *);
+void destroy_inode(Inode_t *, bool);
 
 
 

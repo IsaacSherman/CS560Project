@@ -44,3 +44,4 @@ Temporary Items
 
 # Files from compile
 *.o
+*.disk
