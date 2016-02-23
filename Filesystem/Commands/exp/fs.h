@@ -41,7 +41,7 @@ typedef struct Inode_tag {
 typedef struct FS_tag {
 	int fs_size;		// Size of the file system in bytes
 	int page_size;		// Page size of the file system in bytes
-	int header_size;	// Header size of file system metadata - includes inode information
+	int header_size;	// Header size of file system metadata - includes inode information (also can be considered as the offset in fs to get to the data)
 	int num_inodes;		// Total number of inodes present in the FS (will be at least 1)
 	char *free_list;	// Boolean list of free FS pages
 	Inode_t *root;		// Pointer to the root directory in the FS

@@ -65,7 +65,7 @@ FS_t create_fs() {
 	
 	fs.fs_size = DEFAULT_FS_SIZE;
 	fs.page_size = DEFAULT_PAGE_SIZE;
-	fs.header_size = sizeof(FS_t) + sizeof(fs.fs_size/fs.page_size*sizeof(char)) + fs.fs_size/fs.page_size*sizeof(Inode_t);
+	fs.header_size = 16*sizeof(char) + fs.fs_size/fs.page_size*sizeof(char) + fs.fs_size/fs.page_size*30*sizeof(char);
 	fs.num_inodes = 0;
 	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
 	fs.root = create_inode("/", fs.num_inodes++);
