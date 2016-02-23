@@ -1,0 +1,58 @@
+int open(FS * fileSystem, string fileName, string flags){
+int ret = -1;
+string absPath = interpretPath(fileSystem, fileName);
+FilePtr file;
+switch flags{
+  case 'r': 
+  if(!pathExists) return ret;//Error
+    file = convertPathToPtr(fileSystem, absPath); 
+    ret = addFileToLookupTable(fileSystem, file, flags);//See below for aux functions
+  break;
+  case 'w':
+      if (!pathExists(fileSystem, absPath)){
+        file = createFile(fileSystem, absPath);
+      }
+      else{
+      file = convertPathToPtr(fileSystem, absPath);
+      }
+  break;
+  default: //handle error
+  }
+  
+  ret = addFileToLookupTable(fileSystem, file, flags);
+
+  return ret;
+  }
+  
+string interpretPath(FS * fileSystem, string fileName){
+  //We probably need several levels of path checking here, some way of resolving the absolute path,
+  //I'm just assuming that fileName will start with FS:/ (or some token) if it is absolute and append it to the pwd otherwise
+  string prefix = fileName[0-4], finalPath;
+  if(strcmp(prefix, "FS:/") !=0){
+  //malloc sufficient space for finalPath
+  sprintf(finalPath, "%s/%s", pwd, fileName);
+  }
+  else{
+    finalPath = strdup(fileName);
+  }
+    return finalPath;
+    
+}
+
+FilePtr
+
+//createFile is a filesystem primitive, it creates the file in the hierarchy, but does nothing else.  It may need to call mkdir or fail, 
+//if the directory doesn't exist.  It returns a ptr to the file it just allocated.
+
+//pathExists checks for path validity and returns whether the file exists
+
+//addFileToLookupTable is also a filesystem primitive, the struct should maintain some table of file descriptors.
+//We add filePtr to the end, allocate seek ptrs and return the index for the forward facing filesystem to handle
+
+FilePtr convertPathToPtr(FS * fileSystem, string path){
+  //resolve the path, return a ptr to the block of memory reserved.  Return null if no path exists
+  }
+
+FilePtr createFile(FS * fileSystem, string path){
+  //do mkdirs as necessary, then reserve a portion of memory for the file, and return a pointer to that
+    }
