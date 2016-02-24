@@ -15,10 +15,11 @@
 
 FS_t mkfs(char *);
 void dsfs(FS_t *);
-FS_t create_fs();
+FS_t create_fs(FILE *);
 FS_t open_fs(FILE *);
-Inode_t *create_inode(char *, int);
+Inode_t *create_root(char *, int);
 void destroy_inode(Inode_t *, bool);
+Inode_t *reconstruct_tree(FILE *);
 
 
 
