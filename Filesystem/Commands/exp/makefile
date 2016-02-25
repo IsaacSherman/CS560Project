@@ -7,7 +7,8 @@ CC = gcc
 EXEC = test_mkfs
 SRC_C = mkfs.c fs.c
 SRC_O = mkfs.o fs.o
-FLAGS = 
+FLAGS = -std=c99
+
 
 all: clear_screen obj
 	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC)
