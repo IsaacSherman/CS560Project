@@ -8,4 +8,5 @@ void dupsockin(int fd)
 
 void dupsockout(int fd){
 if(dup2(fd, 1) <0) { perror("dupsockout:dup2"); exit(1);}
+if(dup2(fd, 2) <0) { perror("dupsockout:dup2"); exit(1);}
 }

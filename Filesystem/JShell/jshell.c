@@ -35,8 +35,21 @@ main(int argc, char ** argv){
 	int words=0, lastChar=0, status=0, pid=0, doWait=true, i=0;
 	char ** newArgv= NULL;
 	char * lastWord, * prompt;
-	if(argc > 1) prompt = strdup(argv[1]);
-	else prompt = strdup("jsh:");
+	int port;
+	if(argc > 1) {
+	port = atoi(argv[1]);
+  if (port < 5000) {
+    fprintf(stderr, "usage: serve1 port\n");
+    fprintf(stderr, "       port must be > 5000\n");
+    exit(1);
+  }
+		int sock = serve_socket(port);
+		int fd = accept_connection(sock);
+		dupsockin(fd);
+		dupsockout(fd);
+		}
+
+	prompt = strdup("jsh:");
 	atexit(exitCleanup);
 	jsh = newShell(prompt);
 	globalJShell = jsh;//give me the shell so I can free it later
