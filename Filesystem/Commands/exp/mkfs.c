@@ -6,8 +6,23 @@
 
 #include "fs.h"
 #include "mkfs.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+// ========== PROTOTYPES OF "PRIVATE" FUNCTIONS ==========
+// Users will never call these directly
+
+// Used by mkfs()
+FS_t create_fs(FILE *);
+Inode_t *create_root(int);
+
+FS_t open_fs(FILE *);
+Inode_t *reconstruct_tree(FILE *);
+
+// Used by write_fs()
+void write_inode(FILE *, Inode_t *);
+
+// Used by dsfs()
+void destroy_inode(Inode_t *, bool);
+
 
 /*
  *
