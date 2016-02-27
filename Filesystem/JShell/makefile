@@ -1,14 +1,14 @@
 CC = gcc
 
 MYLIB = src/
-INCLUDE = -I $(MYLIB) -Ilibfdr/
+INCLUDE = -I $(MYLIB) -Ilibfdr/ -I ../Commands/include/
 OTHER = $(wildcard $(MYLIB)*.c)
 SOURCE = $(wildcard *.c)
 ALLC = $(OTHER) $(SOURCE)
 COMPS = $(subst .c,.o, $(OTHER))
 OBJECTS =  $(subst .c,.o, $(OTHER)) $(subst .c,.o, $(SOURCE))
 EXECUTABLES = $(basename $(SOURCE))
-CFLAGS =  -g $(INCLUDE)
+CFLAGS =  -g $(INCLUDE) -std=c99
 LIB = libfdr/libfdr.a
 all: $(OBJECTS) $(EXECUTABLES)
 	echo ALL: $(OBJECTS) $(EXECUTABLES)
@@ -22,7 +22,7 @@ clean:
 	rm -f core $(EXECUTABLES) *.o
 
 $(EXECUTABLES) : $(LIB) $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LIB)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LIB) mkfs.o
 
 #.SUFFIXES: .c .o .a
 
@@ -35,6 +35,6 @@ $(ALLC) : $(LIB)
 #	$(CC) $(CFLAGS) $(basename $@).c -o $@ $(LIB)
 $(OBJECTS) : $(ALLC)
 	echo OBJECT: $@
-	$(CC) -c $(CFLAGS) $(basename $@).c -o $@
+	$(CC) -c $(CFLAGS) $(basename $@).c -o $@ mkfs.o
 
 
