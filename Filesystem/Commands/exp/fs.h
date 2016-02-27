@@ -13,7 +13,10 @@
 
 
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define F 	1						// Used to identify Files
 #define D 	0						// Used to identify Directories
@@ -50,6 +53,9 @@ typedef struct FS_tag {
 	Inode_t *root;		// Pointer to the root directory in the FS
 	Inode_t *cd;		// Pointer to the current directory in the FS
 } FS_t;
+
+void write_fs(char *, FS_t);
+
 
 
 

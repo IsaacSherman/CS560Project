@@ -4,9 +4,9 @@
 #
 
 CC = gcc
-EXEC = test_mkfs
-SRC_C = mkfs.c fs.c
-SRC_O = mkfs.o fs.o
+EXEC = test_mkdir
+SRC_C = mkfs.c fs.c mkdir.c
+SRC_O = mkfs.o fs.o mkdir.o
 FLAGS = -std=c99
 
 

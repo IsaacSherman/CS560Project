@@ -6,8 +6,6 @@
 
 #include "fs.h"
 #include "mkfs.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 // unit tests for functions in mkfs.c
 int main(int argc, char *argv[]) {

@@ -11,12 +11,7 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
-
 FS_t mkfs(char *);
-
-void write_fs(char *, FS_t);
 
 void dsfs(FS_t *);
 
