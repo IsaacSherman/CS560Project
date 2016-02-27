@@ -8,7 +8,7 @@
 #include "mkfs.h"
 
 // ========== PROTOTYPES OF "PRIVATE" FUNCTIONS ==========
-// Users will never call these directly
+// Never call these directly
 
 // Used by mkfs()
 FS_t create_fs(FILE *);
@@ -36,6 +36,7 @@ FS_t mkfs(char *diskName) {
 		
 		f = fopen(diskName, "w");
 		fs = create_fs(f);
+		write_fs(diskName, fs);
 	} else {
 		if(VERBOSE) fprintf(stderr, "\nmkfs: Attempting to open existing FS\n");
 		f = fopen(diskName, "r");
@@ -62,7 +63,7 @@ FS_t create_fs(FILE *f) {
 	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
 	fs.root = create_root(++fs.num_inodes);
 	fs.cd = fs.root;
-		
+	
 	return fs;
 }
 
