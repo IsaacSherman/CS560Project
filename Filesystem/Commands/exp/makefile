@@ -5,8 +5,8 @@
 
 CC = gcc
 EXEC = test_mkdir
-SRC_C = mkfs.c fs.c mkdir.c
-SRC_O = mkfs.o fs.o mkdir.o
+SRC_C = mkfs.c fs.c mkdir.c tree.c
+SRC_O = mkfs.o fs.o mkdir.o tree.o
 FLAGS = -std=c99
 
 
