@@ -18,4 +18,6 @@ rm disk.disk
 
 #./test_mkdir.e
 
-./test_cd.e
+#./test_cd.e
+
+./test_ls.e
