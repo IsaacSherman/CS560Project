@@ -42,13 +42,13 @@ Inode_t *create_inode(char *dir_name, int tag) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	
 	node->name = (char *)malloc(16*sizeof(char));
-	strcpy(node->name, dir_name, 15);
+	strncpy(node->name, dir_name, 15);
 	node->name[15] = '\0';
 	
 	node->tag = tag;
 	node->itype = D;
 	node->size = 0;
-	node->levels = DIRECT
+	node->levels = DIRECT;
 	node->children = (Inode_t **)malloc(2*sizeof(Inode_t *));
 	node->children[1] = node;
 	
