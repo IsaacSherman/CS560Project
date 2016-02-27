@@ -48,13 +48,13 @@ void print_inode(Inode_t *node, bool verbose, int lvl) {
 		for (int i=0; i<lvl; i++) {
 			printf("|    ");
 		}
-		printf("  ");
+		printf("| ");
 		printf("%s\n", (node->itype == F) ? "File" : "Dir");
 		
 		for (int i=0; i<lvl; i++) {
 			printf("|    ");
 		}
-		printf("  ");
+		printf("| ");
 		printf("Size: %d\n", node->size);
 	}
 	
