@@ -42,7 +42,7 @@ FS_t create_fs(FILE *f) {
 	// Initialize the FS
 	fs.fs_size = DEFAULT_FS_SIZE;
 	fs.page_size = DEFAULT_PAGE_SIZE;
-	fs.header_size = 16*sizeof(char) + fs.fs_size/fs.page_size*sizeof(char) + fs.fs_size/fs.page_size*30*sizeof(char);
+	fs.header_size = (4*sizeof(int)) + (fs.fs_size/fs.page_size*sizeof(char)) + (fs.fs_size/fs.page_size*(18*sizeof(char)+3*sizeof(int)));
 	fs.num_inodes = 0;
 	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
 	fs.root = create_root(++fs.num_inodes);
@@ -58,9 +58,9 @@ FS_t create_fs(FILE *f) {
 Inode_t *create_root(int tag) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	
-	node->name = (char)malloc(16*sizeof(char));
-	node->name[0] = "/";
-	node->name[1] = "\0";
+	node->name = (char *)malloc(16*sizeof(char));
+	node->name[0] = '/';
+	node->name[1] = '\0';
 	node->tag = tag;
 	node->itype = D;
 	node->size = 0;
@@ -111,7 +111,7 @@ Inode_t *reconstruct_tree(FILE *f) {
 	
 	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: Attempting to read in Inode info\n");
 	fread(node->name, sizeof(char), 16, f);
-	node->name[15] = 0;
+	node->name[15] = '\0';
 	fread(&node->tag, sizeof(int), 1, f);
 	fread(&node->itype, sizeof(char), 1, f);
 	fread(&node->size, sizeof(int), 1, f);
@@ -169,8 +169,32 @@ void write_fs(char * diskName, FS_t fs) {
 	fwrite(&fs.root->levels, sizeof(char), 1, f);
 	putw(-1, f);
 	
-	close(f);
+	fclose(f);
 	
+	return;
+}
+
+
+/*
+ *
+ */
+void write_inode(FILE *f, Inode_t *inode) {
+	fwrite(inode->name, sizeof(char), 16, f);
+	fwrite(&inode->tag, sizeof(int), 1, f);
+	fwrite(&inode->itype, sizeof(char), 1, f);
+	fwrite(&inode->size, sizeof(int), 1, f);
+	fwrite(&inode->levels, sizeof(char), 1, f);
+	if (inode->itype == F) {
+		fwrite(inode->children[1], sizeof(int), 1, f);
+	} else {
+		putw(-1, f);
+	}
+	
+	if (inode->itype == D) {
+		for (int i=2; i<inode->size; i++) {
+			write_inode(f, inode->children[i]);
+		}
+	}
 	return;
 }
 
@@ -208,6 +232,9 @@ void destroy_inode(Inode_t *inode, bool recursive) {
 	// If a - recursive case
 	} else if (inode->itype == D && inode->size > 0 && recursive) {
 		// TODO
+		for (int i=2; i<inode->size; i++) {
+			destroy_inode(inode->children[i], true);
+		}
 		
 	// If - error case
 	} else {
