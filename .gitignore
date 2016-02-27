@@ -45,4 +45,5 @@ Temporary Items
 # Files from compile
 *.o
 *.disk
+*.e
 test_mkfs
