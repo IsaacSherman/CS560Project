@@ -11,7 +11,7 @@ FLAGS = -std=c99
 
 
 all: clear_screen obj
-	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC)
+	$(CC) $(FLAGS) $(SRC_O) -o $(EXEC)
 
 debug: clear_screen obj
 	$(CC) $(FLAGS) -g $(SRC_O) $(EXEC).c -o $(EXEC)
