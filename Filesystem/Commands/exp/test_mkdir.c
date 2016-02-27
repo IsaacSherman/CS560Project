@@ -21,22 +21,14 @@ int main(int argc, char *argv[]) {
 	
 	printf("done freeing\n");
 	
-	printf("test_fs.fs_size: %d\ntest_fs.page_size: %d\ntest_fs.num_inodes: %d\n", test_fs.fs_size, test_fs.page_size, test_fs.num_inodes);
-	printf("test_fs.root: %x\n\n", (int)test_fs.root);
-	
-	
-	
+	// reopen the fs from file
 	test_fs = mkfs(name);
 	
-	// reopen the fs from file
 	tree(test_fs, true, true);
 
 	dsfs(&test_fs);
 	
 	printf("done freeing\n");
-	
-	printf("test_fs.fs_size: %d\ntest_fs.page_size: %d\ntest_fs.num_inodes: %d\n", test_fs.fs_size, test_fs.page_size, test_fs.num_inodes);
-	printf("test_fs.root: %x\n\n", (int)test_fs.root);
 	
 	return 0;
 }

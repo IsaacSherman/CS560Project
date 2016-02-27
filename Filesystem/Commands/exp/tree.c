@@ -16,6 +16,7 @@ void print_inode(Inode_t *, bool, int);
  *
  */
 void tree(FS_t fs, bool verbose, bool root) {
+	printf("\n\n");
 	if (verbose) {
 		printf("\n========== FILE SYSTEM INFO ==========\n");
 		printf("FILE SYSTEM SIZE: %d bytes\n", fs.fs_size);
@@ -29,6 +30,7 @@ void tree(FS_t fs, bool verbose, bool root) {
 	} else {
 		print_inode(fs.cd, verbose, 0);
 	}
+	printf("\n\n");
 	return;
 }
 
@@ -56,9 +58,15 @@ void print_inode(Inode_t *node, bool verbose, int lvl) {
 		}
 		printf("| ");
 		printf("Size: %d\n", node->size);
+		
+		for (int i=0; i<lvl; i++) {
+			printf("|    ");
+		}
+		printf("| ");
+		printf("\n");
 	}
 	
-	for (int j=2; j<node->size; j++) {
+	for (int j=2; j<node->size+2; j++) {
 		print_inode(node->children[j], verbose, lvl+1);
 	}
 	
