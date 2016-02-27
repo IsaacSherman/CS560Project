@@ -46,4 +46,4 @@ Temporary Items
 *.o
 *.disk
 *.e
-test_mkfs
+*.sh
