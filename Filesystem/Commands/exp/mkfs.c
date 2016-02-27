@@ -45,7 +45,7 @@ FS_t create_fs(FILE *f) {
 	fs.header_size = 16*sizeof(char) + fs.fs_size/fs.page_size*sizeof(char) + fs.fs_size/fs.page_size*30*sizeof(char);
 	fs.num_inodes = 0;
 	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
-	fs.root = create_root("/", fs.num_inodes++);
+	fs.root = create_root(++fs.num_inodes);
 	fs.cd = fs.root;
 		
 	return fs;
@@ -55,10 +55,12 @@ FS_t create_fs(FILE *f) {
 /*
  *
  */
-Inode_t *create_root(char *name, int tag) {
+Inode_t *create_root(int tag) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	
-	node->name = name;
+	node->name = (char)malloc(16*sizeof(char));
+	node->name[0] = "/";
+	node->name[1] = "\0";
 	node->tag = tag;
 	node->itype = D;
 	node->size = 0;
@@ -199,7 +201,7 @@ void dsfs(FS_t *fs) {
 void destroy_inode(Inode_t *inode, bool recursive) {
 	// If a file or a directory with no children - simple case
 	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
-		free(inode->name);
+		if (inode->tag != 0) free(inode->name);
 		free(inode->children);
 		free(inode);
 	
