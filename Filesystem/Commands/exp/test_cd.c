@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 	mkdir(&test_fs, "jkOneMore");
 	cd(&test_fs, "jkOneMore/");
 	mkdir(&test_fs, "lastOne");
+	mkdir(&test_fs, "cosc560");
 
 	tree(test_fs, true, true);
 	tree(test_fs, false, true);
