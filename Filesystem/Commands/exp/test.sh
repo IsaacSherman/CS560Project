@@ -16,5 +16,6 @@ rm disk.disk
 # TESTS
 #./test_mkfs.e
 
-./test_mkdir.e
+#./test_mkdir.e
 
+./test_cd.e

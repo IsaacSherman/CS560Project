@@ -20,11 +20,11 @@
 
 #define F 	1						// Used to identify Files
 #define D 	0						// Used to identify Directories
-#define DEFAULT_FS_SIZE 104857600	// 100 MB
-#define DEFAULT_PAGE_SIZE 4096		// 4 KB
+#define DEFAULT_FS_SIZE 100*1024*1024	// 100 MB
+#define DEFAULT_PAGE_SIZE 4*1024		// 4 KB
 
 // For debugging
-#define VERBOSE true
+#define VERBOSE false
 
 typedef enum Level_tag {
 	DIRECT, 
