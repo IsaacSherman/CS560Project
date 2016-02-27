@@ -8,9 +8,12 @@
 #include <malloc.h>
 //#include <sys/wait.h>
 //#include <sys/types.h>
-//#include <sys/stat.h>
+#include <sys/stat.h>
 #include "myLib.h"
 #include <assert.h>
+#include "../../Commands/include/fs.h"
+#include "../../Commands/include/mkfs.h"
+
 
 Shell 
 newShell(char * prompt){//creates a new shell with objects
@@ -107,6 +110,12 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	*/
 	if(strcmp(*cmd, "mkfs") == 0) {
 	printf("mkfs\n");
+	char * path;
+	if(words > 1){
+	path = strdup(S->input->fields[1]);
+	}
+	else path = strdup("disk.disk");
+	FS_t fs = mkfs(path);
 	//make file system
 	}
 	else if (strcmp(*cmd, "read") == 0){
