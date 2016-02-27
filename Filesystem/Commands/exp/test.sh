@@ -14,7 +14,7 @@ rm disk.disk
 
 ##
 # TESTS
-./test_mkfs
+./test_mkfs.e
 
-#./test_mkdir
+#./test_mkdir.e
 

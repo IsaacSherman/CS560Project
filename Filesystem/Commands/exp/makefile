@@ -4,7 +4,7 @@
 #
 
 CC = gcc
-EXEC = test_mkfs
+EXEC = test_mkfs.e
 SRC_C = mkfs.c fs.c
 SRC_O = mkfs.o fs.o
 FLAGS = -std=c99
