@@ -36,26 +36,6 @@ FS_t mkfs(char *diskName) {
 /*
  *
  */
-void dsfs(FS_t *fs) {
-	free(fs->free_list);
-	if (fs->num_inodes)
-		destroy_inode(fs->root, true);
-	
-	fs->fs_size = -1;
-	fs->page_size = -1;
-	fs->header_size = -1;
-	fs->num_inodes = -1;
-	fs->free_list = NULL;
-	fs->root = NULL;
-	fs->cd = NULL;
-	
-	return;
-}
-
-
-/*
- *
- */
 FS_t create_fs(FILE *f) {
 	FS_t fs;
 	
@@ -67,23 +47,27 @@ FS_t create_fs(FILE *f) {
 	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
 	fs.root = create_root("/", fs.num_inodes++);
 	fs.cd = fs.root;
-	
-	// Write initial FS to file
-	fwrite(&fs.fs_size, sizeof(int), 1, f);
-	fwrite(&fs.page_size, sizeof(int), 1, f);
-	fwrite(&fs.header_size, sizeof(int), 1, f);
-	fwrite(&fs.num_inodes, sizeof(int), 1, f);
-	fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
-	
-	// Write out root
-	fwrite(fs.root->name, sizeof(char), 16, f);
-	fwrite(&fs.root->tag, sizeof(int), 1, f);
-	fwrite(&fs.root->itype, sizeof(char), 1, f);
-	fwrite(&fs.root->size, sizeof(int), 1, f);
-	fwrite(&fs.root->levels, sizeof(char), 1, f);
-	putw(-1, f);
 		
 	return fs;
+}
+
+
+/*
+ *
+ */
+Inode_t *create_root(char *name, int tag) {
+	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
+	
+	node->name = name;
+	node->tag = tag;
+	node->itype = D;
+	node->size = 0;
+	node->levels = DIRECT;
+	node->children = (Inode_t**)malloc(2*sizeof(Inode_t *));
+	node->children[0] = node;
+	node->children[1] = node;
+	
+	return node;
 }
 
 
@@ -112,46 +96,6 @@ FS_t open_fs(FILE *f) {
 	fs.cd = fs.root;
 	
 	return fs;
-}
-
-
-/*
- *
- */
-Inode_t *create_root(char *name, int tag) {
-	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
-	
-	node->name = name;
-	node->tag = tag;
-	node->itype = D;
-	node->size = 0;
-	node->levels = DIRECT;
-	node->children = (Inode_t**)malloc(2*sizeof(Inode_t *));
-	node->children[0] = node;
-	node->children[1] = node;
-	
-	return node;
-}
-
-
-/*
- *
- */
-void destroy_inode(Inode_t *inode, bool recursive) {
-	// If a file or a directory with no children - simple case
-	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
-		free(inode);
-	
-	// If a - recursive case
-	} else if (inode->itype == D && inode->size > 0 && recursive) {
-		// TODO
-		
-	// If - error case
-	} else {
-		printf("Error: deleting a non-empty directory!\n");
-	}
-	
-	return;
 }
 
 
@@ -197,4 +141,76 @@ Inode_t *reconstruct_tree(FILE *f) {
 	}
 	
 	return node;
+}
+
+
+/*
+ *
+ */
+void write_fs(char * diskName, FS_t fs) {
+	FILE *f;
+	
+	f = fopen(diskName, "w");
+	
+	// Write initial FS to file
+	fwrite(&fs.fs_size, sizeof(int), 1, f);
+	fwrite(&fs.page_size, sizeof(int), 1, f);
+	fwrite(&fs.header_size, sizeof(int), 1, f);
+	fwrite(&fs.num_inodes, sizeof(int), 1, f);
+	fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	
+	// Write out root
+	fwrite(fs.root->name, sizeof(char), 16, f);
+	fwrite(&fs.root->tag, sizeof(int), 1, f);
+	fwrite(&fs.root->itype, sizeof(char), 1, f);
+	fwrite(&fs.root->size, sizeof(int), 1, f);
+	fwrite(&fs.root->levels, sizeof(char), 1, f);
+	putw(-1, f);
+	
+	close(f);
+	
+	return;
+}
+
+
+/*
+ *
+ */
+void dsfs(FS_t *fs) {
+	free(fs->free_list);
+	if (fs->num_inodes)
+		destroy_inode(fs->root, true);
+	
+	fs->fs_size = -1;
+	fs->page_size = -1;
+	fs->header_size = -1;
+	fs->num_inodes = -1;
+	fs->free_list = NULL;
+	fs->root = NULL;
+	fs->cd = NULL;
+	
+	return;
+}
+
+
+/*
+ *
+ */
+void destroy_inode(Inode_t *inode, bool recursive) {
+	// If a file or a directory with no children - simple case
+	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
+		free(inode->name);
+		free(inode->children);
+		free(inode);
+	
+	// If a - recursive case
+	} else if (inode->itype == D && inode->size > 0 && recursive) {
+		// TODO
+		
+	// If - error case
+	} else {
+		printf("Error: deleting a non-empty directory!\n");
+	}
+	
+	return;
 }

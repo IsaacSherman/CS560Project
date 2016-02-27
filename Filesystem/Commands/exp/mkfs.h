@@ -20,6 +20,7 @@ FS_t open_fs(FILE *);
 Inode_t *create_root(char *, int);
 void destroy_inode(Inode_t *, bool);
 Inode_t *reconstruct_tree(FILE *);
+void write_fs(char *, FS_t);
 
 
 
