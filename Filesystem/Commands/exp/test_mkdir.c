@@ -8,18 +8,8 @@ int main(int argc, char *argv[]) {
 	char *name = "disk.disk";
 	FS_t test_fs = mkfs(name);
 	
-	// write out to file and close
+	tree(test_fs, true, true);
 	
-	// reopen the fs from file
-	printf("test_fs.fs_size: %d\ntest_fs.page_size: %d\ntest_fs.num_inodes: %d\n", test_fs.fs_size, test_fs.page_size, test_fs.num_inodes);
-	printf("test_fs.header_size: %d\n", (int)test_fs.header_size);
-	printf("test_fs.free_list: %x\n", (int)test_fs.free_list);
-	printf("test_fs.root: %x\n\n", (int)test_fs.root);
-	
-	printf("root.name: %s \nroot.tag: %d\nroot.itype: %d\nroot.size: %d\n", test_fs.root->name, test_fs.root->tag, (int)test_fs.root->itype, test_fs.root->size);
-	
-	printf("total number of files/directories is %d\n", test_fs.num_inodes);
-
 	dsfs(&test_fs);
 	
 	printf("done freeing\n");
@@ -32,14 +22,7 @@ int main(int argc, char *argv[]) {
 	test_fs = mkfs(name);
 	
 	// reopen the fs from file
-	printf("test_fs.fs_size: %d\ntest_fs.page_size: %d\ntest_fs.num_inodes: %d\n", test_fs.fs_size, test_fs.page_size, test_fs.num_inodes);
-	printf("test_fs.header_size: %d\n", (int)test_fs.header_size);
-	printf("test_fs.free_list: %x\n", (int)test_fs.free_list);
-	printf("test_fs.root: %x\n\n", (int)test_fs.root);
-	
-	printf("root.name: %s \nroot.tag: %d\nroot.itype: %d\nroot.size: %d\n", test_fs.root->name, test_fs.root->tag, (int)test_fs.root->itype, test_fs.root->size);
-	
-	printf("total number of files/directories is %d\n", test_fs.num_inodes);
+	tree(test_fs, true, true);
 
 	dsfs(&test_fs);
 	
