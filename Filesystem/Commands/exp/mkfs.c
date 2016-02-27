@@ -161,13 +161,8 @@ void write_fs(char * diskName, FS_t fs) {
 	fwrite(&fs.num_inodes, sizeof(int), 1, f);
 	fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
 	
-	// Write out root
-	fwrite(fs.root->name, sizeof(char), 16, f);
-	fwrite(&fs.root->tag, sizeof(int), 1, f);
-	fwrite(&fs.root->itype, sizeof(char), 1, f);
-	fwrite(&fs.root->size, sizeof(int), 1, f);
-	fwrite(&fs.root->levels, sizeof(char), 1, f);
-	putw(-1, f);
+	// Write out inodes
+	write_inode(f, fs.root);
 	
 	fclose(f);
 	
