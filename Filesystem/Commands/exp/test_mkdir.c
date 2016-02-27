@@ -10,8 +10,9 @@ int main(int argc, char *argv[]) {
 	FS_t test_fs = mkfs(name);
 	
 	tree(test_fs, true, true);
-	mkdir(test_fs, "whalsey");
-	mkdir(test_fs, "isherman");
+	mkdir(&test_fs, "whalsey");
+	mkdir(&test_fs, "isherman");
+
 	tree(test_fs, true, true);
 	tree(test_fs, false, true);
 	

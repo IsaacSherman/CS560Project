@@ -14,17 +14,18 @@ Inode_t *create_inode(char *, int);
 /*
  *
  */
-void mkdir(FS_t fs, char *dir_name) {
+void mkdir(FS_t *fs, char *dir_name) {
 	// first check to make sure that there are additional inode spaces
-	if (fs.num_inodes<(fs.fs_size/fs.page_size)) {
+	if (fs->num_inodes<(fs->fs_size/fs->page_size)) {
 		
 		// check that dir_name is not too long
 		if (strlen(dir_name) < 16) {
-			fs.num_inodes++;
-			fs.cd->size++;
-			realloc((void *)fs.cd->children, fs.cd->size*sizeof(Inode_t *));
-			fs.cd->children[fs.cd->size+1] = create_inode(dir_name, fs.num_inodes);
-			fs.cd->children[fs.cd->size+1]->children[0] = fs.cd;
+			if (VERBOSE) printf("mkdir: attempting to create new directory\n");
+			fs->num_inodes++;
+			fs->cd->size++;
+			realloc((void *)fs->cd->children, fs->cd->size*sizeof(Inode_t *));
+			fs->cd->children[fs->cd->size+1] = create_inode(dir_name, fs->num_inodes);
+			fs->cd->children[fs->cd->size+1]->children[0] = fs->cd;
 			
 		} else {
 			printf("\nmkdir: Directory name is too long. Limit 15 characters.\n");
