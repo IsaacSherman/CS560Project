@@ -1,6 +1,7 @@
 #include "fs.h"
 #include "mkfs.h"
 #include "mkdir.h"
+#include "tree.h"
 
 // unit tests for functions in mkfs.c
 int main(int argc, char *argv[]) {
