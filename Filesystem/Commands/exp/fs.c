@@ -12,15 +12,21 @@ void write_inode(FILE *, Inode_t *);
  */
 void write_fs(char * diskName, FS_t fs) {
 	FILE *f;
+	int test; 
 	
-	f = fopen(diskName, "w");
+	f = fopen(diskName, "r+");
 	
 	// Write initial FS to file
-	fwrite(&fs.fs_size, sizeof(int), 1, f);
-	fwrite(&fs.page_size, sizeof(int), 1, f);
-	fwrite(&fs.header_size, sizeof(int), 1, f);
-	fwrite(&fs.num_inodes, sizeof(int), 1, f);
-	fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	test = fwrite(&fs.fs_size, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
+	test = fwrite(&fs.page_size, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
+	test = fwrite(&fs.header_size, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
+	test = fwrite(&fs.num_inodes, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
+	test = fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
 	
 	// Write out inodes
 	write_inode(f, fs.root);
@@ -35,19 +41,26 @@ void write_fs(char * diskName, FS_t fs) {
  *
  */
 void write_inode(FILE *f, Inode_t *inode) {
-	fwrite(inode->name, sizeof(char), 16, f);
-	fwrite(&inode->tag, sizeof(int), 1, f);
-	fwrite(&inode->itype, sizeof(char), 1, f);
-	fwrite(&inode->size, sizeof(int), 1, f);
-	fwrite(&inode->levels, sizeof(char), 1, f);
+	int test;
+	test = fwrite(inode->name, sizeof(char), 16, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
+	test = fwrite(&inode->tag, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
+	test = fwrite(&inode->itype, sizeof(char), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
+	test = fwrite(&inode->size, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
+	test = fwrite(&inode->levels, sizeof(char), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
 	if (inode->itype == F) {
-		fwrite(inode->children[1], sizeof(int), 1, f);
+		test = fwrite(inode->children[1], sizeof(int), 1, f);
+		if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
 	} else {
-		putw(-1, f);
+		test = putw(-1, f);
 	}
 	
 	if (inode->itype == D) {
-		for (int i=2; i<inode->size; i++) {
+		for (int i=2; i<inode->size+2; i++) {
 			write_inode(f, inode->children[i]);
 		}
 	}

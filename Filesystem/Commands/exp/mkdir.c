@@ -23,7 +23,7 @@ void mkdir(FS_t *fs, char *dir_name) {
 			if (VERBOSE) printf("mkdir: attempting to create new directory\n");
 			fs->num_inodes++;
 			fs->cd->size++;
-			realloc((void *)fs->cd->children, fs->cd->size*sizeof(Inode_t *));
+			fs->cd->children = realloc((void *)fs->cd->children, (fs->cd->size+2)*sizeof(Inode_t *));
 			fs->cd->children[fs->cd->size+1] = create_inode(dir_name, fs->num_inodes);
 			fs->cd->children[fs->cd->size+1]->children[0] = fs->cd;
 			

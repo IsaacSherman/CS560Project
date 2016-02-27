@@ -121,16 +121,24 @@ Inode_t *reconstruct_tree(FILE *f) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	node->name = (char *)malloc(16*sizeof(char));
 	long int data;
+	int test = 0;
 	
 	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: Attempting to read in Inode info\n");
-	fread(node->name, sizeof(char), 16, f);
+	test = fread(node->name, sizeof(char), 16, f);
 	node->name[15] = '\0';
-	fread(&node->tag, sizeof(int), 1, f);
-	fread(&node->itype, sizeof(char), 1, f);
-	fread(&node->size, sizeof(int), 1, f);
-	fread(&node->levels, sizeof(char), 1, f);
-	fread((int *)&data, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	test = fread(&node->tag, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	test = fread(&node->itype, sizeof(char), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	test = fread(&node->size, sizeof(int), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	test = fread(&node->levels, sizeof(char), 1, f);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	test = fread((int *)&data, sizeof(int), 1, f);
 	
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: name = %s\n", node->name);
 	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: size = %d\n", node->size);
 	
 	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: At switch statement\n");
@@ -185,20 +193,21 @@ void dsfs(FS_t *fs) {
 void destroy_inode(Inode_t *inode, bool recursive) {
 	// If a file or a directory with no children - simple case
 	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
+		if (VERBOSE) fprintf(stderr, "\ndestroy_inode: deleting directory with no children or file\n");
 		free(inode->name);
 		free(inode->children);
 		free(inode);
 	
 	// If a - recursive case
 	} else if (inode->itype == D && inode->size > 0 && recursive) {
-		// TODO
-		for (int i=2; i<inode->size; i++) {
+		if (VERBOSE) fprintf(stderr, "\ndestroy_inode: deleting directory with children\n");
+		for (int i=2; i<inode->size+2; i++) {
 			destroy_inode(inode->children[i], true);
 		}
 		
 	// If - error case
 	} else {
-		printf("Error: deleting a non-empty directory!\n");
+		printf("destroy_inode: Can not delete a non-empty directory!\n");
 	}
 	
 	return;

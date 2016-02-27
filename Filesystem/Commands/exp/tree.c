@@ -57,6 +57,12 @@ void print_inode(Inode_t *node, bool verbose, int lvl) {
 			printf("|    ");
 		}
 		printf("| ");
+		printf("%d\n", node->tag);
+		
+		for (int i=0; i<lvl; i++) {
+			printf("|    ");
+		}
+		printf("| ");
 		printf("Size: %d\n", node->size);
 		
 		for (int i=0; i<lvl; i++) {
