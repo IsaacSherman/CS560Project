@@ -201,7 +201,7 @@ void dsfs(FS_t *fs) {
 void destroy_inode(Inode_t *inode, bool recursive) {
 	// If a file or a directory with no children - simple case
 	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
-		if (inode->tag != 0) free(inode->name);
+		free(inode->name);
 		free(inode->children);
 		free(inode);
 	
