@@ -4,14 +4,14 @@
 #
 
 CC = gcc
-EXEC = test_mkfs.e
+EXEC = test_mkfs
 SRC_C = mkfs.c fs.c
 SRC_O = mkfs.o fs.o
 FLAGS = -std=c99
 
 
 all: clear_screen obj
-	$(CC) $(FLAGS) $(SRC_O) -o $(EXEC)
+	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC).e
 
 debug: clear_screen obj
 	$(CC) $(FLAGS) -g $(SRC_O) $(EXEC).c -o $(EXEC)
