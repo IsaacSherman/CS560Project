@@ -181,7 +181,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		}
 	argv[i] = NULL;
 	int pid = fork();
-	if(pid = 0){
+	if(pid == 0){
 	execvp(cmd, argv);
 	perror("exec");
 	exit(1);
