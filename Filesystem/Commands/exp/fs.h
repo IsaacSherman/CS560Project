@@ -52,9 +52,10 @@ typedef struct FS_tag {
 	char *free_list;	// Boolean list of free FS pages
 	Inode_t *root;		// Pointer to the root directory in the FS
 	Inode_t *cd;		// Pointer to the current directory in the FS
+	char * path;
 }* FS_t;
 
-void write_fs(char *, FS_t);
+void write_fs(FS_t);
 FS_t mallocFS(void);
 
 

@@ -123,7 +123,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		S->fs = temp;
 		tree(S->fs, true, true);
 		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
-		
+		free(path);
 	}
 	else if (strcmp(*cmd, "read") == 0){
 		//read, 
@@ -143,11 +143,11 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "mkdir") == 0){
 		mkdir(S->fs, S->input->fields[1]);
-		//mkdir, 
+		write_fs(S->fs);//mkdir, 
 	}
 	else if (strcmp(*cmd, "rmdir") == 0){
 		rmdir(S->fs, S->input->fields[1]);
-		
+		write_fs(S->fs);
 		//rmdir, 
 	}
 	else if (strcmp(*cmd, "cd") == 0){
@@ -161,7 +161,6 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "tree") == 0){
 		//tree,
-		printf("s->fs = %d", (int)S->fs);
 		tree(S->fs, true, false); 
 
 	}
@@ -172,9 +171,8 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		//export, 
 	}
 	else{
-	printf("Invalid option: %s", *cmd);
-	}
-	
+	printf("Invalid option: %s, going to try to fork and exec:", *cmd);
+		
 	for(i = 0; i < words; i++){
 
 		(*argv)[i] = strdup((S->input->fields[i]));
@@ -182,7 +180,15 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		printf("argv[%d] = %s\n", i, (*argv)[i]);
 		}
 	argv[i] = NULL;
-	return special;
+	int pid = fork();
+	if(pid = 0){
+	execvp(cmd, argv);
+	perror("exec");
+	exit(1);
+	}
+	else return special;
+	}
+	
 }
 
 char **

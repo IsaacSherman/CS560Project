@@ -17,8 +17,9 @@ return ret;
 /*
  *
  */
-void write_fs(char * diskName, FS_t fs) {
+void write_fs(FS_t fs) {
 	FILE *f;
+	char * diskName = fs->path;
 	int test; 
 	
 	f = fopen(diskName, "r+");

@@ -11,10 +11,10 @@
 // Never call these directly
 
 // Used by mkfs()
-FS_t create_fs(FILE *);
+FS_t create_fs(FILE *, char *);
 Inode_t *create_root(int);
 
-FS_t open_fs(FILE *);
+FS_t open_fs(FILE *, char *);
 Inode_t *reconstruct_tree(FILE *);
 
 // Used by dsfs()
@@ -32,13 +32,13 @@ FS_t mkfs(char *diskName) {
 		if(VERBOSE) fprintf(stdout, "\nmkfs: No Existing File System by that name\n");
 		f = fopen(diskName, "w");
 		if(f == 0) perror("fopen");
-		fs = create_fs(f);
-		write_fs(diskName, fs);
+		fs = create_fs(f, diskName);
+		write_fs(fs);
 	} else {
 		if(VERBOSE) fprintf(stdout, "\nmkfs: Attempting to open existing FS\n");
 		f = fopen(diskName, "r");
 		if(f == 0) perror("fopen");
-		fs = open_fs(f);
+		fs = open_fs(f, diskName);
 	}
 	
 	fclose(f);
@@ -50,7 +50,7 @@ FS_t mkfs(char *diskName) {
 /*
  *
  */
-FS_t create_fs(FILE *f) {
+FS_t create_fs(FILE *f, char * diskName) {
 	FS_t fs = mallocFS();
 	printf("Entering create_fs\n");
 	// Initialize the FS
@@ -61,6 +61,7 @@ FS_t create_fs(FILE *f) {
 	fs->free_list = (char *)calloc(1,fs->fs_size/fs->page_size*sizeof(char));
 	fs->root = create_root(++fs->num_inodes);
 	fs->cd = fs->root;
+	fs->path = strdup(diskName);
 	printf("Exiting create_fs\n");
 	
 	return fs;
@@ -91,7 +92,7 @@ Inode_t *create_root(int tag) {
 /*
  *
  */
-FS_t open_fs(FILE *f) {
+FS_t open_fs(FILE *f, char * diskName) {
 	FS_t fs = mallocFS();
 	int parent;
 	Inode_t *hold;
@@ -111,7 +112,7 @@ FS_t open_fs(FILE *f) {
 	fs->root = reconstruct_tree(f);
 	fs->root->children[0] = fs->root;
 	fs->cd = fs->root;
-	
+	fs->path = strdup(diskName);
 	return fs;
 }
 
