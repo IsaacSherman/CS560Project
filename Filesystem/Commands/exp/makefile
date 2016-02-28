@@ -9,6 +9,24 @@ SRC_C = mkfs.c fs.c mkdir.c tree.c cd.c ls.c
 SRC_O = mkfs.o fs.o mkdir.o tree.o cd.o ls.o
 FLAGS = -std=c99
 
+CFLAGS = -O $(FLAGS)
+
+
+OBJS = fs.o mkdir.o mkfs.o ls.o cd.o tree.o
+
+
+
+lib: $(OBJS)
+	ar ru fslib.a $(OBJS)
+	ranlib fslib.a 
+
+clean:
+	rm -f core *.o libfdr.a
+
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+
 
 all: clear_screen obj
 	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC).e
@@ -24,3 +42,5 @@ clean:
 
 clear_screen: 
 	clear
+
+	

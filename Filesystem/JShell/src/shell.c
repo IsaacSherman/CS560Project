@@ -8,12 +8,13 @@
 #include <malloc.h>
 //#include <sys/wait.h>
 //#include <sys/types.h>
-#include <sys/stat.h>
+//#include <sys/stat.h>
 #include "myLib.h"
 #include <assert.h>
-#include "../../Commands/include/fs.h"
-#include "../../Commands/include/mkfs.h"
+#include "fslib.h"
 
+struct stat {};
+ FS_t globalFS;
 
 Shell 
 newShell(char * prompt){//creates a new shell with objects
@@ -115,7 +116,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	path = strdup(S->input->fields[1]);
 	}
 	else path = strdup("disk.disk");
-	FS_t fs = mkfs(path);
+	globalFS = mkfs(path);
 	//make file system
 	}
 	else if (strcmp(*cmd, "read") == 0){
@@ -142,6 +143,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "cd") == 0){
 	//cd, 
+	cd(&globalFS, cmd);
 	}
 	else if (strcmp(*cmd, "ls") == 0){
 	//ls, 
@@ -450,8 +452,8 @@ forkToExec(Shell jsh){
 				exit(1);
 			}
 		}
-		execvp(cmd, argv ); //we come out here
-		perror(cmd);
+		//execvp(cmd, argv ); //we come out here
+		//perror(cmd);
 		exit(1);
 	}
 }

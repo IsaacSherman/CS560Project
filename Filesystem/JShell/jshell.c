@@ -6,7 +6,9 @@
 #include "myLib.h"
 #include "shell.h"
 #include <string.h>
+#include "fslib.h"
 Shell globalJShell=NULL;
+
 extern killZombies();
 extern void exit(int);
 
