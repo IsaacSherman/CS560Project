@@ -110,53 +110,53 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	export (string src, string dest)
 	*/
 	if(strcmp(*cmd, "mkfs") == 0) {
-	printf("mkfs\n");
-	char * path;
-	if(words > 1){
-	path = strdup(S->input->fields[1]);
-	}
-	else path = strdup("disk.disk");
-	globalFS = mkfs(path);
-	//make file system
+		//make file system
+		char *path;
+		if(words > 1){
+			path = strdup(S->input->fields[1]);
+		}
+		else path = strdup("disk.disk");
+		globalFS = mkfs(path);
+	
 	}
 	else if (strcmp(*cmd, "read") == 0){
-	//read, 
+		//read, 
 	printf("read\n");
 	}
 	else if (strcmp(*cmd, "open") == 0){
-	//open, 
+		//open, 
 	}
 	else if (strcmp(*cmd, "write") == 0){
-	//write, 
+		//write, 
 	}
 	else if (strcmp(*cmd, "seek") == 0){
-	//seek, 
+		//seek, 
 	}
 	else if (strcmp(*cmd, "close") == 0){
-	//close, 
+		//close, 
 	}
 	else if (strcmp(*cmd, "mkdir") == 0){
-	//mkdir, 
+		//mkdir, 
 	}
 	else if (strcmp(*cmd, "rmdir") == 0){
-	//rmdir, 
+		//rmdir, 
 	}
 	else if (strcmp(*cmd, "cd") == 0){
-	//cd, 
-	cd(&globalFS, cmd);
+		//cd, 
+		cd(&globalFS, cmd);
 	}
 	else if (strcmp(*cmd, "ls") == 0){
-	//ls, 
+		//ls, 
 	}
 	else if (strcmp(*cmd, "tree") == 0){
-	//tree,
+		//tree,
 		tree(globalFS, true, false); 
 	}
 	else if (strcmp(*cmd, "import") == 0){
-	//import, 
+		//import, 
 	}
 	else if (strcmp(*cmd, "export") == 0){
-	//export, 
+		//export, 
 	}
 	else{
 	printf("Invalid option: %s", *cmd);
