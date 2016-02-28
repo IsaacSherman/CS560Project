@@ -55,6 +55,8 @@ typedef struct FS_tag {
 }* FS_t;
 
 void write_fs(char *, FS_t);
+FS_t mallocFS(void);
+
 
 
 

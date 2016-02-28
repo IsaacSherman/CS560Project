@@ -142,9 +142,12 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		//close, 
 	}
 	else if (strcmp(*cmd, "mkdir") == 0){
+		mkdir(S->fs, S->input->fields[1]);
 		//mkdir, 
 	}
 	else if (strcmp(*cmd, "rmdir") == 0){
+		rmdir(S->fs, S->input->fields[1]);
+		
 		//rmdir, 
 	}
 	else if (strcmp(*cmd, "cd") == 0){
@@ -153,6 +156,8 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "ls") == 0){
 		//ls, 
+		ls(S->fs);
+		
 	}
 	else if (strcmp(*cmd, "tree") == 0){
 		//tree,

@@ -10,6 +10,8 @@ OBJECTS =  $(subst .c,.o, $(OTHER)) $(subst .c,.o, $(SOURCE))
 EXECUTABLES = $(basename $(SOURCE))
 CFLAGS =  -g $(INCLUDE) -std=c99
 LIB = libfdr/libfdr.a libfdr/fslib.a
+
+
 all: $(OBJECTS) $(EXECUTABLES)
 	echo ALL: $(OBJECTS) $(EXECUTABLES)
 test: 
