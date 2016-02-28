@@ -149,7 +149,8 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	//ls, 
 	}
 	else if (strcmp(*cmd, "tree") == 0){
-	//tree, 
+	//tree,
+		tree(globalFS, true, false); 
 	}
 	else if (strcmp(*cmd, "import") == 0){
 	//import, 
