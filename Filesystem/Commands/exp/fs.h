@@ -24,7 +24,7 @@
 #define DEFAULT_PAGE_SIZE 4*1024		// 4 KB
 
 // For debugging
-#define VERBOSE false
+#define VERBOSE true
 
 typedef enum Level_tag {
 	DIRECT, 
