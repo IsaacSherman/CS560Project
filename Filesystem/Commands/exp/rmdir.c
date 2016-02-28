@@ -44,13 +44,15 @@ void rmdir(FS_t fs, char *dir_name) {
 					newTemp[j] = oldTemp[j+1];
 				}
 			}
+		fs->cd->children = newTemp;
+		free(oldTemp);
 		}
 
 		// Set childrent to new array
-		fs->cd->children = newTemp;
+
 
 		// Free old array
-		free(oldTemp);
+
 
 	} else {
 		printf("\nrmdir: Directory does not exist\n");
