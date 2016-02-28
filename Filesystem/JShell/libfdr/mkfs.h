@@ -13,7 +13,7 @@
 
 FS_t mkfs(char *);
 
-void dsfs(FS_t *);
+void dsfs(FS_t);
 
 
 

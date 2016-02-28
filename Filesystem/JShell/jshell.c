@@ -12,6 +12,7 @@ Shell globalJShell=NULL;
 extern killZombies();
 extern void exit(int);
 
+
 void
 exitCleanup(void){
 		killZombies(globalJShell);
@@ -54,6 +55,8 @@ main(int argc, char ** argv){
 	prompt = strdup("jsh:");
 	atexit(exitCleanup);
 	jsh = newShell(prompt);
+			printf("s->fs = %d", (int)jsh->fs);
+
 	globalJShell = jsh;//give me the shell so I can free it later
 	SafeFree(prompt);
 	for(words = getCommand(jsh); words != EOF; words=getCommand(jsh)){

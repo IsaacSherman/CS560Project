@@ -14,10 +14,9 @@
 #include "fslib.h"
 
 struct stat {};
- FS_t globalFS;
 
 Shell 
-newShell(char * prompt){//creates a new shell with objects
+newShell(char * prompt, FS_t fs){//creates a new shell with objects
 	Shell ret;
 	ret = (Shell) malloc(sizeof(struct shellstruc));
 	if(ret == NULL) return NULL; //malloc error
@@ -39,6 +38,7 @@ newShell(char * prompt){//creates a new shell with objects
 		SafeFree(ret);
 		return NULL;
 	}
+	ret->fs = malloc(sizeof(FS_t));
 	return ret;
 }
 
@@ -112,12 +112,18 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	if(strcmp(*cmd, "mkfs") == 0) {
 		//make file system
 		char *path;
+		FS_t temp;
 		if(words > 1){
 			path = strdup(S->input->fields[1]);
 		}
 		else path = strdup("disk.disk");
-		globalFS = mkfs(path);
-	
+		printf("s->fs = %d", (int)S->fs);
+		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
+		temp = mkfs(path);
+		S->fs = temp;
+		tree(S->fs, true, true);
+		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
+		
 	}
 	else if (strcmp(*cmd, "read") == 0){
 		//read, 
@@ -143,14 +149,16 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "cd") == 0){
 		//cd, 
-		cd(&globalFS, cmd);
+		cd(S->fs, S->input->fields[1]);
 	}
 	else if (strcmp(*cmd, "ls") == 0){
 		//ls, 
 	}
 	else if (strcmp(*cmd, "tree") == 0){
 		//tree,
-		tree(globalFS, true, false); 
+		printf("s->fs = %d", (int)S->fs);
+		tree(S->fs, true, false); 
+
 	}
 	else if (strcmp(*cmd, "import") == 0){
 		//import, 
@@ -435,28 +443,16 @@ forkToExec(Shell jsh){
 	int pid, w, status;
 	w=shouldWait(jsh);
 	fflush(stdout);
-	pid = fork();
-	if (pid != 0) {//If parent
-		addUniqueVToTree_int(jsh->pids, pid, strdup(jsh->input->fields[0]));
-		if(w) {
-			int j= wait(&status);   
-			JRB Child = jrb_find_int(jsh->pids, j);
-			if (Child != NULL) SafeFree(Child->val.v);//process name
-			jrb_delete_node(Child);//remove child from tree
-		}
-		free(argv);
-	} else {//child
 		if(parseCommand(jsh, &cmd, &argv)){//special characters found
 			int err = handleSpecials(jsh, argv);//If pipes, we'll die in here.  Otherwise, 
 			if (err < 0){
 				fprintf(stderr, "Ambiguous %sput redirect.\n",  err==-1?"in":"out");
-				exit(1);
 			}
 		}
 		//execvp(cmd, argv ); //we come out here
 		//perror(cmd);
-		exit(1);
-	}
+	
+	return 0;
 }
 
 

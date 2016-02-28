@@ -4,12 +4,14 @@
 
 #include "fields.h"
 #include "jrb.h"
+#include "fs.h"
 
 typedef struct shellstruc {
 char * prompt;
 JRB pids;
 IS input;
 int waitFlag;
+FS_t * fs;
 }* Shell;
 
 

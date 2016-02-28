@@ -11,7 +11,7 @@
 
 
 
-void cd(FS_t *, char *);
+void cd(FS_t, char *);
 
 
 

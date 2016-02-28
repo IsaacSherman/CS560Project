@@ -24,7 +24,7 @@
 #define DEFAULT_PAGE_SIZE 4*1024		// 4 KB
 
 // For debugging
-#define VERBOSE false
+#define VERBOSE true
 
 typedef enum Level_tag {
 	DIRECT, 
@@ -52,7 +52,7 @@ typedef struct FS_tag {
 	char *free_list;	// Boolean list of free FS pages
 	Inode_t *root;		// Pointer to the root directory in the FS
 	Inode_t *cd;		// Pointer to the current directory in the FS
-} FS_t;
+}* FS_t;
 
 void write_fs(char *, FS_t);
 

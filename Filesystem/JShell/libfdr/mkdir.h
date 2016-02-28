@@ -11,7 +11,7 @@
 
 
 
-void mkdir(FS_t *, char *);
+void mkdir(FS_t, char *);
 
 
 

@@ -7,6 +7,13 @@
 // Used by write_fs()
 void write_inode(FILE *, Inode_t *);
 
+FS_t mallocFS(){
+FS_t ret = malloc(sizeof(struct FS_tag));
+ret->root = malloc(sizeof(struct Inode_tag));
+ret->cd = ret->root;
+return ret;
+}
+
 /*
  *
  */
@@ -17,19 +24,19 @@ void write_fs(char * diskName, FS_t fs) {
 	f = fopen(diskName, "r+");
 	
 	// Write initial FS to file
-	test = fwrite(&fs.fs_size, sizeof(int), 1, f);
+	test = fwrite(&fs->fs_size, sizeof(int), 1, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
-	test = fwrite(&fs.page_size, sizeof(int), 1, f);
+	test = fwrite(&fs->page_size, sizeof(int), 1, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
-	test = fwrite(&fs.header_size, sizeof(int), 1, f);
+	test = fwrite(&fs->header_size, sizeof(int), 1, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
-	test = fwrite(&fs.num_inodes, sizeof(int), 1, f);
+	test = fwrite(&fs->num_inodes, sizeof(int), 1, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
-	test = fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	test = fwrite(fs->free_list, sizeof(char), fs->fs_size/fs->page_size, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_fs: %d items written\n", test);
 	
 	// Write out inodes
-	write_inode(f, fs.root);
+	write_inode(f, fs->root);
 	
 	fclose(f);
 	

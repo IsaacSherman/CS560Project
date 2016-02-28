@@ -14,7 +14,7 @@
 /*
  *
  */
-void cd(FS_t *fs, char *dir_name) {
+void cd(FS_t fs, char *dir_name) {
 	int flag = 1;
 	int oldi = 0;
 	

@@ -1,5 +1,5 @@
 /*
- * mkfs.c written by William Halsey
+ * mkfs->c written by William Halsey
  * whalsey@vols.utk.edu
  *
  */
@@ -23,6 +23,13 @@ void write_inode(FILE *, Inode_t *);
 // Used by dsfs()
 void destroy_inode(Inode_t *, bool);
 
+FS_t mallocFS(){
+FS_t ret;
+ret = malloc(sizeof(struct FS_tag));
+ret.root = malloc(sizeof(struct Inode_tag));
+ret.cd = ret.root;
+return ret;
+}
 
 /*
  *
@@ -53,16 +60,17 @@ FS_t mkfs(char *diskName) {
  *
  */
 FS_t create_fs(FILE *f) {
-	FS_t fs;
+	FS_t fs = mallocFS();
+	
 	
 	// Initialize the FS
-	fs.fs_size = DEFAULT_FS_SIZE;
-	fs.page_size = DEFAULT_PAGE_SIZE;
-	fs.header_size = (4*sizeof(int)) + (fs.fs_size/fs.page_size*sizeof(char)) + (fs.fs_size/fs.page_size*(18*sizeof(char)+3*sizeof(int)));
-	fs.num_inodes = 0;
-	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
-	fs.root = create_root(++fs.num_inodes);
-	fs.cd = fs.root;
+	fs->fs_size = DEFAULT_FS_SIZE;
+	fs->page_size = DEFAULT_PAGE_SIZE;
+	fs->header_size = (4*sizeof(int)) + (fs->fs_size/fs->page_size*sizeof(char)) + (fs->fs_size/fs->page_size*(18*sizeof(char)+3*sizeof(int)));
+	fs->num_inodes = 0;
+	fs->free_list = (char *)calloc(1,fs->fs_size/fs->page_size*sizeof(char));
+	fs->root = create_root(++fs->num_inodes);
+	fs->cd = fs->root;
 	
 	return fs;
 }
@@ -93,25 +101,26 @@ Inode_t *create_root(int tag) {
  *
  */
 FS_t open_fs(FILE *f) {
-	FS_t fs;
+	FS_t fs = mallocFS();
+	
 	int parent;
 	Inode_t *hold;
 	Inode_t *search;
 	
 	// Read in FS data
 	if(VERBOSE) fprintf(stderr, "\nopen_fs: Attempting to read in FS header\n");
-	fread(&fs.fs_size, sizeof(int), 1, f);
-	fread(&fs.page_size, sizeof(int), 1, f);
-	fread(&fs.header_size, sizeof(int), 1, f);
-	fread(&fs.num_inodes, sizeof(int), 1, f);
-	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
-	fread(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	fread(&fs->fs_size, sizeof(int), 1, f);
+	fread(&fs->page_size, sizeof(int), 1, f);
+	fread(&fs->header_size, sizeof(int), 1, f);
+	fread(&fs->num_inodes, sizeof(int), 1, f);
+	fs->free_list = (char *)calloc(1,fs->fs_size/fs->page_size*sizeof(char));
+	fread(fs->free_list, sizeof(char), fs->fs_size/fs->page_size, f);
 	
 	// Reconstruct directory tree
 	if(VERBOSE) fprintf(stderr, "\nopen_fs: Attempting to reconstruct tree\n"); 
-	fs.root = reconstruct_tree(f);
-	fs.root->children[0] = fs.root;
-	fs.cd = fs.root;
+	fs->root = reconstruct_tree(f);
+	fs->root->children[0] = fs->root;
+	fs->cd = fs->root;
 	
 	return fs;
 }
@@ -171,14 +180,14 @@ void write_fs(char * diskName, FS_t fs) {
 	f = fopen(diskName, "w");
 	
 	// Write initial FS to file
-	fwrite(&fs.fs_size, sizeof(int), 1, f);
-	fwrite(&fs.page_size, sizeof(int), 1, f);
-	fwrite(&fs.header_size, sizeof(int), 1, f);
-	fwrite(&fs.num_inodes, sizeof(int), 1, f);
-	fwrite(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	fwrite(&fs->fs_size, sizeof(int), 1, f);
+	fwrite(&fs->page_size, sizeof(int), 1, f);
+	fwrite(&fs->header_size, sizeof(int), 1, f);
+	fwrite(&fs->num_inodes, sizeof(int), 1, f);
+	fwrite(fs->free_list, sizeof(char), fs->fs_size/fs->page_size, f);
 	
 	// Write out inodes
-	write_inode(f, fs.root);
+	write_inode(f, fs->root);
 	
 	fclose(f);
 	

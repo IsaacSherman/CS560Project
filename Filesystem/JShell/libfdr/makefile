@@ -36,6 +36,10 @@
 
 CFLAGS = -O
 
+copyHeaders: 
+	cp ../Commands/exp/*.h ./libfdr/
+	cp ../Commands/exp/fslib.a ./libfdr/fslib.a
+	
 all: libfdr.a
 
 OBJS = dllist.o fields.o jval.o jrb.o

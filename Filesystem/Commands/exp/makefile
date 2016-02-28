@@ -9,7 +9,7 @@ SRC_C = mkfs.c fs.c mkdir.c tree.c cd.c ls.c
 SRC_O = mkfs.o fs.o mkdir.o tree.o cd.o ls.o
 FLAGS = -std=c99
 
-CFLAGS = -O $(FLAGS)
+CFLAGS = -g -O $(FLAGS)
 
 
 OBJS = fs.o mkdir.o mkfs.o ls.o cd.o tree.o
@@ -19,6 +19,8 @@ OBJS = fs.o mkdir.o mkfs.o ls.o cd.o tree.o
 lib: $(OBJS)
 	ar ru fslib.a $(OBJS)
 	ranlib fslib.a 
+	cp fslib.a ../../JShell/libfdr/
+	
 
 clean:
 	rm -f core *.o libfdr.a

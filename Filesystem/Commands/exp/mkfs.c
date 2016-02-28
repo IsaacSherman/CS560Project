@@ -1,5 +1,5 @@
 /*
- * mkfs.c written by William Halsey
+ * mkfs->c written by William Halsey
  * whalsey@vols.utk.edu
  *
  */
@@ -30,13 +30,14 @@ FS_t mkfs(char *diskName) {
 	
 	if (!fopen(diskName, "r")) {
 		if(VERBOSE) fprintf(stdout, "\nmkfs: No Existing File System by that name\n");
-		
 		f = fopen(diskName, "w");
+		if(f == 0) perror("fopen");
 		fs = create_fs(f);
 		write_fs(diskName, fs);
 	} else {
 		if(VERBOSE) fprintf(stdout, "\nmkfs: Attempting to open existing FS\n");
 		f = fopen(diskName, "r");
+		if(f == 0) perror("fopen");
 		fs = open_fs(f);
 	}
 	
@@ -50,16 +51,17 @@ FS_t mkfs(char *diskName) {
  *
  */
 FS_t create_fs(FILE *f) {
-	FS_t fs;
-	
+	FS_t fs = mallocFS();
+	printf("Entering create_fs\n");
 	// Initialize the FS
-	fs.fs_size = DEFAULT_FS_SIZE;
-	fs.page_size = DEFAULT_PAGE_SIZE;
-	fs.header_size = (4*sizeof(int)) + (fs.fs_size/fs.page_size*sizeof(char)) + (fs.fs_size/fs.page_size*(18*sizeof(char)+3*sizeof(int)));
-	fs.num_inodes = 0;
-	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
-	fs.root = create_root(++fs.num_inodes);
-	fs.cd = fs.root;
+	fs->fs_size = DEFAULT_FS_SIZE;
+	fs->page_size = DEFAULT_PAGE_SIZE;
+	fs->header_size = (4*sizeof(int)) + (fs->fs_size/fs->page_size*sizeof(char)) + (fs->fs_size/fs->page_size*(18*sizeof(char)+3*sizeof(int)));
+	fs->num_inodes = 0;
+	fs->free_list = (char *)calloc(1,fs->fs_size/fs->page_size*sizeof(char));
+	fs->root = create_root(++fs->num_inodes);
+	fs->cd = fs->root;
+	printf("Exiting create_fs\n");
 	
 	return fs;
 }
@@ -90,25 +92,25 @@ Inode_t *create_root(int tag) {
  *
  */
 FS_t open_fs(FILE *f) {
-	FS_t fs;
+	FS_t fs = mallocFS();
 	int parent;
 	Inode_t *hold;
 	Inode_t *search;
 	
 	// Read in FS data
 	if(VERBOSE) fprintf(stdout, "\nopen_fs: Attempting to read in FS header\n");
-	fread(&fs.fs_size, sizeof(int), 1, f);
-	fread(&fs.page_size, sizeof(int), 1, f);
-	fread(&fs.header_size, sizeof(int), 1, f);
-	fread(&fs.num_inodes, sizeof(int), 1, f);
-	fs.free_list = (char *)calloc(1,fs.fs_size/fs.page_size*sizeof(char));
-	fread(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
+	fread(&(fs->fs_size), sizeof(int), 1, f);
+	fread(&(fs->page_size), sizeof(int), 1, f);
+	fread(&(fs->header_size), sizeof(int), 1, f);
+	fread(&(fs->num_inodes), sizeof(int), 1, f);
+	fs->free_list = (char *)calloc(1,fs->fs_size/fs->page_size*sizeof(char));
+	fread(fs->free_list, sizeof(char), fs->fs_size/fs->page_size, f);
 	
 	// Reconstruct directory tree
 	if(VERBOSE) fprintf(stdout, "\nopen_fs: Attempting to reconstruct tree\n"); 
-	fs.root = reconstruct_tree(f);
-	fs.root->children[0] = fs.root;
-	fs.cd = fs.root;
+	fs->root = reconstruct_tree(f);
+	fs->root->children[0] = fs->root;
+	fs->cd = fs->root;
 	
 	return fs;
 }
@@ -170,7 +172,7 @@ Inode_t *reconstruct_tree(FILE *f) {
 /*
  *
  */
-void dsfs(FS_t *fs) {
+void dsfs(FS_t fs) {
 	free(fs->free_list);
 	if (fs->num_inodes)
 		destroy_inode(fs->root, true);

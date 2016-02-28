@@ -15,8 +15,8 @@
  *
  */
 void ls(FS_t fs) {
-	for (int i=2; i<fs.cd->size+2; i++) {
-		printf("%s\n", fs.cd->children[i]->name);
+	for (int i=2; i<fs->cd->size+2; i++) {
+		printf("%s\n", fs->cd->children[i]->name);
 	}
 	return;
 }

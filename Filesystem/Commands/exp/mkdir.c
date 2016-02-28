@@ -14,7 +14,7 @@ Inode_t *create_inode(char *, int);
 /*
  *
  */
-void mkdir(FS_t *fs, char *dir_name) {
+void mkdir(FS_t fs, char *dir_name) {
 	// first check to make sure that there are additional inode spaces
 	if (fs->num_inodes<(fs->fs_size/fs->page_size)) {
 		
