@@ -29,13 +29,13 @@ FS_t mkfs(char *diskName) {
 	FILE *f;
 	
 	if (!fopen(diskName, "r")) {
-		if(VERBOSE) fprintf(stderr, "\nmkfs: No Existing File System by that name\n");
+		if(VERBOSE) fprintf(stdout, "\nmkfs: No Existing File System by that name\n");
 		
 		f = fopen(diskName, "w");
 		fs = create_fs(f);
 		write_fs(diskName, fs);
 	} else {
-		if(VERBOSE) fprintf(stderr, "\nmkfs: Attempting to open existing FS\n");
+		if(VERBOSE) fprintf(stdout, "\nmkfs: Attempting to open existing FS\n");
 		f = fopen(diskName, "r");
 		fs = open_fs(f);
 	}
@@ -96,7 +96,7 @@ FS_t open_fs(FILE *f) {
 	Inode_t *search;
 	
 	// Read in FS data
-	if(VERBOSE) fprintf(stderr, "\nopen_fs: Attempting to read in FS header\n");
+	if(VERBOSE) fprintf(stdout, "\nopen_fs: Attempting to read in FS header\n");
 	fread(&fs.fs_size, sizeof(int), 1, f);
 	fread(&fs.page_size, sizeof(int), 1, f);
 	fread(&fs.header_size, sizeof(int), 1, f);
@@ -105,7 +105,7 @@ FS_t open_fs(FILE *f) {
 	fread(fs.free_list, sizeof(char), fs.fs_size/fs.page_size, f);
 	
 	// Reconstruct directory tree
-	if(VERBOSE) fprintf(stderr, "\nopen_fs: Attempting to reconstruct tree\n"); 
+	if(VERBOSE) fprintf(stdout, "\nopen_fs: Attempting to reconstruct tree\n"); 
 	fs.root = reconstruct_tree(f);
 	fs.root->children[0] = fs.root;
 	fs.cd = fs.root;
@@ -123,33 +123,33 @@ Inode_t *reconstruct_tree(FILE *f) {
 	long int data;
 	int test = 0;
 	
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: Attempting to read in Inode info\n");
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: Attempting to read in Inode info\n");
 	test = fread(node->name, sizeof(char), 16, f);
 	node->name[15] = '\0';
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread(&node->tag, sizeof(int), 1, f);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread(&node->itype, sizeof(char), 1, f);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread(&node->size, sizeof(int), 1, f);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread(&node->levels, sizeof(char), 1, f);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread((int *)&data, sizeof(int), 1, f);
 	
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: %d items read\n", test);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: name = %s\n", node->name);
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: size = %d\n", node->size);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: name = %s\n", node->name);
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: size = %d\n", node->size);
 	
-	if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: At switch statement\n");
+	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: At switch statement\n");
 	switch (node->itype) {
 		case(F): 
-			if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: case(F)\n");
+			if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: case(F)\n");
 			node->children = (Inode_t **)malloc(2*sizeof(Inode_t *));
 			node->children[1] = (Inode_t *)data;
 			break;
 		case(D):
-			if(VERBOSE) fprintf(stderr, "\nreconstruct_tree: case(D)\n");
+			if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: case(D)\n");
 			node->children = (Inode_t **)malloc((node->size+2)*sizeof(Inode_t *));
 			node->children[1] = node;
 			
@@ -193,14 +193,14 @@ void dsfs(FS_t *fs) {
 void destroy_inode(Inode_t *inode, bool recursive) {
 	// If a file or a directory with no children - simple case
 	if ((inode->itype == D && inode->size == 0) || inode->itype == F) {
-		if (VERBOSE) fprintf(stderr, "\ndestroy_inode: deleting directory with no children or file\n");
+		if (VERBOSE) fprintf(stdout, "\ndestroy_inode: deleting directory with no children or file\n");
 		free(inode->name);
 		free(inode->children);
 		free(inode);
 	
 	// If a - recursive case
 	} else if (inode->itype == D && inode->size > 0 && recursive) {
-		if (VERBOSE) fprintf(stderr, "\ndestroy_inode: deleting directory with children\n");
+		if (VERBOSE) fprintf(stdout, "\ndestroy_inode: deleting directory with children\n");
 		for (int i=2; i<inode->size+2; i++) {
 			destroy_inode(inode->children[i], true);
 		}
