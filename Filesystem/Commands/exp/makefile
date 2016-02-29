@@ -28,7 +28,7 @@ clean:
 .SUFFIXES: .c .o
 .c.o:
 	$(CC) $(CFLAGS) -c $*.c
-
+	clear
 
 all: clear_screen obj
 	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC).e
