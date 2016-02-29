@@ -1,11 +1,11 @@
 /*
- * read.c written by William Halsey
+ * write.c written by William Halsey
  * whalsey@vols.utk.edu
  *
  */
 
 #include "fs.h"
-#include "read.h"
+#include "write.h"
 
 // ========== PROTOTYPES OF "PRIVATE" FUNCTIONS ==========
 // Never call these directly
@@ -14,7 +14,7 @@
 /*
  *
  */
-void read(FS_t fs, int index, int size) {
+void write(FS_t fs, int index, char *string) {
 	//
 	if (index < FD_SIZE && fs->fd[index].active == 1 && fs->fd[index].mode == R) {
 		if (size + fs->fd[index].offset >= fs->fd[index].file->size)
