@@ -52,7 +52,7 @@ typedef struct FS_tag {
 }* FS_t;
 
 
-
+Inode_t * find(FS_t, char*);
 
 
 #endif

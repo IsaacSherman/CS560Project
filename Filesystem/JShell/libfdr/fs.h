@@ -20,8 +20,11 @@
 
 #define F 	1						// Used to identify Files
 #define D 	0						// Used to identify Directories
+#define R	0						// Used for read mode
+#define W	1						// Used for write mode
 #define DEFAULT_FS_SIZE 100*1024*1024	// 100 MB
 #define DEFAULT_PAGE_SIZE 4*1024		// 4 KB
+#define FD_SIZE	10
 
 // For debugging
 #define VERBOSE true
@@ -43,6 +46,14 @@ typedef struct Inode_tag {
 									//													[1] - points to itself
 } Inode_t;
 
+// Data struct for the file descriptors
+typedef struct FileD_tag {
+	int active;			// Whether the descriptor is actively used or not
+	Inode_t *file;		// Pointer to the inode of the file
+	int offset;			// User byte offset of file
+	int mode;			// Either read or write
+} FileD_t;
+
 // Data structure definition for the file system or FS
 typedef struct FS_tag {
 	int fs_size;		// Size of the file system in bytes
@@ -52,7 +63,8 @@ typedef struct FS_tag {
 	char *free_list;	// Boolean list of free FS pages
 	Inode_t *root;		// Pointer to the root directory in the FS
 	Inode_t *cd;		// Pointer to the current directory in the FS
-	char * path;
+	char * path;		// Disk filename
+	FileD_t fd[FD_SIZE];	// Array for file descriptor information
 }* FS_t;
 
 void write_fs(FS_t);
