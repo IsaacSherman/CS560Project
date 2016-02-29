@@ -50,6 +50,17 @@ prompt(Shell jsh){
 	fflush(stdout);
 }
 
+void 
+addColonToPrompt(Shell jsh){
+int size = strlen(jsh->prompt)+1;
+char * newPrompt = malloc(strlen(prompt)+1);
+for(int i = 0; i < size-1; ++i){
+	newPrompt[i] = jsh->prompt[i];
+	}
+	newPrompt[size-1] = ':';
+	newPrompt[size] = '\0';
+	jsh->prompt = strdup(newPrompt);
+	}
 
 void 
 freeShell(Shell ret){//frees everything associated with the shell, including vals of tree
@@ -88,6 +99,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	int i, words = S->input->NF;
 	*cmd = strdup(S->input->fields[0]);
 	int special = false;
+	FS_t fs = S->fs;
 	/*
 	these are the commands we need to parse, with declarations in the style of C:
 	Also, strings are char *, it looks like all of our files will be text
@@ -123,6 +135,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		S->fs = temp;
 		tree(S->fs, true, true);
 		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
+		
 		free(path);
 	}
 	else if (strcmp(*cmd, "read") == 0){
@@ -153,6 +166,9 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	else if (strcmp(*cmd, "cd") == 0){
 		//cd, 
 		cd(S->fs, S->input->fields[1]);
+	//	free(S->prompt);
+		S->prompt = strdup(fs->cd->name);
+		addColonToPrompt(S);
 	}
 	else if (strcmp(*cmd, "ls") == 0){
 		//ls, 
@@ -455,10 +471,10 @@ forkToExec(Shell jsh){
 	w=shouldWait(jsh);
 	fflush(stdout);
 		if(parseCommand(jsh, &cmd, &argv)){//special characters found
-			int err = handleSpecials(jsh, argv);//If pipes, we'll die in here.  Otherwise, 
-			if (err < 0){
-				fprintf(stderr, "Ambiguous %sput redirect.\n",  err==-1?"in":"out");
-			}
+			//int err = handleSpecials(jsh, argv);//If pipes, we'll die in here.  Otherwise, 
+			//if (err < 0){
+			//	fprintf(stderr, "Ambiguous %sput redirect.\n",  err==-1?"in":"out");
+			//}
 		}
 		//execvp(cmd, argv ); //we come out here
 		//perror(cmd);

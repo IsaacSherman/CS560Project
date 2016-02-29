@@ -12,7 +12,7 @@ void rmdir(FS_t fs, char *dir_name) {
 	
 	// Check children for matching filename
 	for (i=2; i<fs->cd->size+2; i++) {
-		if (!strncmp(dir_name, fs->cd->children[i], 16)) {
+		if (!strncmp(dir_name, fs->cd->children[i]->name, 16)) {
 			flag = 1;
 			break;
 		}
@@ -29,6 +29,7 @@ void rmdir(FS_t fs, char *dir_name) {
 			printf("\nrmdir: Directory not empty\n");
 		} else {
 			fs->cd->size--;
+			fs->num_inodes--;
 			// Allocate new children array
 			Inode_t **newTemp = (Inode_t **)malloc((fs->cd->size+2)*sizeof(Inode_t *));
 		

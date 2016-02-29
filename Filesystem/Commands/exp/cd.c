@@ -49,10 +49,13 @@ void cd(FS_t fs, char *dir_name) {
 				oldi = i+1;
 				
 			} else {
+				printf("for comparison: dir_name (without oldi mod =) %s, oldi = %d ", dir_name, oldi);
 				for (int j=2; j<searcher->size+2; j++) {
+					printf("comp: %s with %s\n", searcher->children[j]->name, dir_name+oldi); 
 					if (!strncmp(searcher->children[j]->name, dir_name+oldi, i-oldi)) {
 						searcher = searcher->children[j];
 						flag = 0;
+						break;
 					}
 				}
 				flag = 1-flag;

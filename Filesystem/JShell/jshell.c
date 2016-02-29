@@ -39,19 +39,24 @@ main(int argc, char ** argv){
 	char ** newArgv= NULL;
 	char * lastWord, * prompt;
 	int port;
+	
 	if(argc > 1) {
 	port = atoi(argv[1]);
   if (port < 5000) {
     fprintf(stderr, "usage: serve1 port\n");
     fprintf(stderr, "       port must be > 5000\n");
-    exit(1);
-  }
+    //exit(1);
+	port = -1;
+	}
+  else{
+		if(port >= 5000){
 		int sock = serve_socket(port);
 		int fd = accept_connection(sock);
 		dupsockin(fd);
 		dupsockout(fd);
 		}
-
+	}
+	}
 	prompt = strdup("jsh:");
 	atexit(exitCleanup);
 	jsh = newShell(prompt);
