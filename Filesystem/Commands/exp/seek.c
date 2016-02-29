@@ -16,7 +16,7 @@
  */
 void seek(FS_t fs, int index, int offset) {
 	if (index < FD_SIZE && fs->fd[index].active == 1) {
-		if (offset + fs->fd[index].offset += offset < fs->fd[index].file->size)
+		if (offset + fs->fd[index].offset < fs->fd[index].file->size)
 			fs->fd[index].offset += offset;
 		else
 			printf("\nseek: Offset is too large\n");
