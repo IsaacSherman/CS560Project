@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <malloc.h>
-//#include <sys/wait.h>
+#include <sys/wait.h>
 //#include <sys/types.h>
 //#include <sys/stat.h>
 #include "myLib.h"
@@ -14,6 +14,8 @@
 #include "fslib.h"
 
 struct stat {};
+
+void prepToExec(Shell S, char * cmd, char ** argv);
 
 Shell 
 newShell(char * prompt, FS_t fs){//creates a new shell with objects
@@ -196,22 +198,29 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 
 	}
 	else{
+	
 	printf("Invalid option: %s, going to try to fork and exec:", *cmd);
-		
+	
+	Inode_t * val = find(S->fs, *cmd);
+	if(val != NULL){
+	
 	for(i = 0; i < words; i++){
 
 		(*argv)[i] = strdup((S->input->fields[i]));
 		if((*argv)[i][0]=='>' || (*argv)[i][0]=='<' ||(*argv)[i][0]=='|' ) special = true;  
 		printf("argv[%d] = %s\n", i, (*argv)[i]);
 		}
+		
 	argv[i] = NULL;
 	int pid = fork();
 	if(pid == 0){
-	execvp(cmd, argv);
+	prepToExec(S->fs, cmd, argv);
 	perror("exec");
 	exit(1);
 	}
 	else return special;
+	}
+	else printf("Invalid Option %s\n", *cmd);
 	}
 	
 }
@@ -507,6 +516,30 @@ getCommand(Shell jsh){ //returns number of words, EOF on ctrl-d
 	}//break on "exit"
 
 	return words;
+}
+
+void 
+prepToExec(Shell S, char * cmd, char ** argv){
+	secretCat(S->fs, cmd, "evilmonkey");
+	int pid = fork();
+	if(pid == 0){
+	execlp("chmod", "evilmonkey", "+x");
+	exit(1);
+	}
+	else{
+	pid = fork();
+	if(pid==0){
+	execvp("evilmonkey", argv);
+	exit(1);
+	}
+	else{
+	sleep(1);
+	execlp("rm", "evilmonkey", NULL);
+	exit(1);
+	}
+	}
+	
+	
 }
 
 void

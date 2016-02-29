@@ -14,6 +14,20 @@ ret->cd = ret->root;
 return ret;
 }
 
+
+Inode_t * find(FS_t fs, char * fileName){
+Inode_t * ret = NULL;
+int i;
+for(i =2; i < fs->cd->size+1; ++i){
+	if(strcmp(fs->cd->children[i]->name, fileName)==0) 
+		{
+			ret = fs->cd->children[i];
+			break;
+		}
+	}
+	return ret;
+	
+}
 /*
  *
  */
