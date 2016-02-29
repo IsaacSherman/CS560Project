@@ -52,7 +52,7 @@ FS_t mkfs(char *diskName) {
  */
 FS_t create_fs(FILE *f, char * diskName) {
 	FS_t fs = mallocFS();
-	printf("Entering create_fs\n");
+	if (VERBOSE) printf("Entering create_fs\n");
 	// Initialize the FS
 	fs->fs_size = DEFAULT_FS_SIZE;
 	fs->page_size = DEFAULT_PAGE_SIZE;
@@ -62,7 +62,7 @@ FS_t create_fs(FILE *f, char * diskName) {
 	fs->root = create_root(++fs->num_inodes);
 	fs->cd = fs->root;
 	fs->path = strdup(diskName);
-	printf("Exiting create_fs\n");
+	if (VERBOSE) printf("Exiting create_fs\n");
 	
 	return fs;
 }

@@ -133,7 +133,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		else path = strdup("disk.disk");
 		temp = mkfs(path);
 		S->fs = temp;
-		tree(S->fs, true, true);
+		//tree(S->fs, true, true);
 		
 		free(path);
 	}

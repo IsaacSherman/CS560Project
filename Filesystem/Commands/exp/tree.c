@@ -17,13 +17,13 @@ void print_inode(Inode_t *, bool, int);
  */
 void tree(FS_t fs, bool verbose, bool root) {
 	printf("\n\n");
-	if (verbose) {
-		printf("\n========== FILE SYSTEM INFO ==========\n");
-		printf("FILE SYSTEM SIZE: %d bytes\n", fs->fs_size);
-		printf("PAGE SIZE: %d bytes\n", fs->page_size);
-		printf("METADATA SIZE: %d bytes\n", fs->header_size);
-		printf("NUMBER OF INODES: %d\n", fs->num_inodes);
-	}
+//	if (verbose) {
+//		printf("\n========== FILE SYSTEM INFO ==========\n");
+//		printf("FILE SYSTEM SIZE: %d bytes\n", fs->fs_size);
+//		printf("PAGE SIZE: %d bytes\n", fs->page_size);
+//		printf("METADATA SIZE: %d bytes\n", fs->header_size);
+//		printf("NUMBER OF INODES: %d\n", fs->num_inodes);
+//	}
 	
 	if (root) {
 		print_inode(fs->root, verbose, 0);

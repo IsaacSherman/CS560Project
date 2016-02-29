@@ -27,7 +27,7 @@
 #define FD_SIZE	10
 
 // For debugging
-#define VERBOSE true
+#define VERBOSE false
 
 typedef enum Level_tag {
 	DIRECT, 

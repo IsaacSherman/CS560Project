@@ -60,7 +60,7 @@ main(int argc, char ** argv){
 	prompt = strdup("jsh:");
 	atexit(exitCleanup);
 	jsh = newShell(prompt);
-			printf("s->fs = %d", (int)jsh->fs);
+			if (VERBOSE) printf("s->fs = %d", (int)jsh->fs);
 
 	globalJShell = jsh;//give me the shell so I can free it later
 	SafeFree(prompt);
