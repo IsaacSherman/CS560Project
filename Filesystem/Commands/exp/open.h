@@ -7,6 +7,6 @@
 #ifndef OPEN_H
 #define OPEN_H
 
-int open(FS_t, char *);
+int open(FS_t, char *, int);
 
 #endif

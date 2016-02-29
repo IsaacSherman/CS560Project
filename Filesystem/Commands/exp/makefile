@@ -5,14 +5,14 @@
 
 CC = gcc
 EXEC = test_ls
-SRC_C = mkfs.c fs.c mkdir.c tree.c cd.c ls.c rmdir.c import.c cat.c secretCat.c
-SRC_O = mkfs.o fs.o mkdir.o tree.o cd.o ls.o rmdir.o import.o cat.o secretCat.o
+SRC_C = mkfs.c fs.c mkdir.c tree.c cd.c ls.c rmdir.c import.c cat.c secretCat.c open.c close.c
+SRC_O = mkfs.o fs.o mkdir.o tree.o cd.o ls.o rmdir.o import.o cat.o secretCat.o open.o close.o
 FLAGS = -std=c99
 
 CFLAGS = -g -O $(FLAGS)
 
 
-OBJS = fs.o mkdir.o mkfs.o ls.o cd.o tree.o rmdir.o import.o cat.o secretCat.o
+OBJS = fs.o mkdir.o mkfs.o ls.o cd.o tree.o rmdir.o import.o cat.o secretCat.o open.o close.o
 
 
 
