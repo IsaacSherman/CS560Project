@@ -61,8 +61,9 @@ void write_inode(FILE *f, Inode_t *inode) {
 	test = fwrite(&inode->levels, sizeof(char), 1, f);
 	if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
 	if (inode->itype == F) {
-		test = fwrite(inode->children[1], sizeof(int), 1, f);
-		if(VERBOSE) fprintf(stderr, "\nwrite_inode: %d items written\n", test);
+		if(VERBOSE) fprintf(stderr, "\nwrite_inode(1): %d  disk offset\n", (int)inode->children[1]);
+		test = fwrite((int*)&(inode->children[1]), sizeof(int), 1, f);
+		if(VERBOSE) fprintf(stderr, "\nwrite_inode(2): %d  disk offset\n", (int)inode->children[1]);
 	} else {
 		test = putw(-1, f);
 	}

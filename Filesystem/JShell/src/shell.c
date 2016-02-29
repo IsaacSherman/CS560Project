@@ -182,6 +182,8 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "import") == 0){
 		//import, 
+		import(S->fs, S->input->fields[1], S->input->fields[2]); 
+		write_fs(S->fs);
 	}
 	else if (strcmp(*cmd, "export") == 0){
 		//export, 

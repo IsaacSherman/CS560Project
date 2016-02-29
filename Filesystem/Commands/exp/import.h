@@ -7,6 +7,6 @@
 #ifndef IMPORT_H
 #define IMPORT_H
 
-void import(FS_t, char *);
+void import(FS_t, char *, char*);
 
 #endif

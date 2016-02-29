@@ -7,9 +7,9 @@
 #include "fs.h"
 #include "import.h"
 
-Inode_t *create_inode(char *dir_name, int tag);
+Inode_t *create_import(char *dir_name, int tag);
 
-void import(FS_t fs, char *dir_name) {
+void import(FS_t fs, char *dir_name, char * dir_dest) {
 	// first check to make sure that there are additional inode spaces
 	if (fs->num_inodes>=(fs->fs_size/fs->page_size)) {
 		printf("\nmkdir: Not enough metadata space.\n");
@@ -27,24 +27,24 @@ void import(FS_t fs, char *dir_name) {
 	
 	// Check to see if name already exists
 	for (int i=2; i<fs->cd->size+2; i++) {
-		if (!strncmp(dir_name, fs->cd->children[i]->name, 16))
+		if (!strncmp(dir_dest, fs->cd->children[i]->name, 16))
 			flag1 = 0;
 	}
 
 	// If the name does not exist in CD
 	if (flag1) {
 		// Make sure filename is short
-		if (strlen(dir_name) < 16) {
+		if (strlen(dir_dest) < 16) {
 			// Figure out size of file to import and rewind to beginning of file
 			f = fopen(dir_name, "r");
 			fseek(f, 0L, SEEK_END);
 			size = ftell(f);
-			fseek(fp, 0L, SEEK_SET);
+			fseek(f, 0L, SEEK_SET);
 			
 			// Find total number of pages file will reside in and number of remainder bytes
 			numPages = size/fs->page_size;
-			remainder = size%fs->page_size;
-			if (remainder)
+			remain = size%fs->page_size;
+			if (remain)
 				numPages++;
 			
 			// TODO - FIX THIS!!
@@ -82,10 +82,11 @@ void import(FS_t fs, char *dir_name) {
 				fs->num_inodes++;
 				fs->cd->size++;
 				fs->cd->children = realloc((void *)fs->cd->children, (fs->cd->size+2)*sizeof(Inode_t *));
-				fs->cd->children[fs->cd->size+1] = create_inode(dir_name, fs->num_inodes);
+				fs->cd->children[fs->cd->size+1] = create_import(dir_dest, fs->num_inodes);
 				fs->cd->children[fs->cd->size+1]->children[0] = fs->cd;
 				
 				fs->cd->children[fs->cd->size+1]->children[1] = (Inode_t *)(freePages[0]*fs->page_size+fs->header_size);
+				if(VERBOSE) printf("Disk offset = %d", (int)fs->cd->children[fs->cd->size+1]->children[1]);
 				fs->cd->children[fs->cd->size+1]->size = size;
 				// Adjust levels if necessary
 				if (numPages>1)
@@ -95,6 +96,7 @@ void import(FS_t fs, char *dir_name) {
 				fseek(f2, (long)fs->cd->children[fs->cd->size+1]->children[1], SEEK_SET);
 				fwrite(DATA, sizeof(char), size, f2);
 				
+				free(DATA);
 				fclose(f2);
 			}
 			
@@ -102,14 +104,15 @@ void import(FS_t fs, char *dir_name) {
 		} else {
 			printf("\nimport: Filename is too long. Limit 15 characters.\n");
 		}
-	} else {
+			free(freePages);
+		} else {//flag1
 		printf("\nimport: Name already exists in this directory\n");
 	}
 
 	return;
 }
 
-Inode_t *create_inode(char *dir_name, int tag) {
+Inode_t *create_import(char *dir_name, int tag) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	
 	node->name = (char *)malloc(16*sizeof(char));

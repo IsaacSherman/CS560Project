@@ -72,7 +72,7 @@ void print_inode(Inode_t *node, bool verbose, int lvl) {
 		printf("\n");
 	}
 	
-	for (int j=2; j<node->size+2; j++) {
+	for (int j=2; j<node->size+2 && node->itype != F; j++) {
 		print_inode(node->children[j], verbose, lvl+1);
 	}
 	

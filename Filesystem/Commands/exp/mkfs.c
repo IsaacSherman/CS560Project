@@ -123,7 +123,7 @@ FS_t open_fs(FILE *f, char * diskName) {
 Inode_t *reconstruct_tree(FILE *f) {
 	Inode_t *node = (Inode_t *)malloc(sizeof(Inode_t));
 	node->name = (char *)malloc(16*sizeof(char));
-	long int data;
+	int data;
 	int test = 0;
 	
 	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: Attempting to read in Inode info\n");
@@ -138,7 +138,7 @@ Inode_t *reconstruct_tree(FILE *f) {
 	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	test = fread(&node->levels, sizeof(char), 1, f);
 	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
-	test = fread((int *)&data, sizeof(int), 1, f);
+	test = fread(&data, sizeof(int), 1, f);
 	
 	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: %d items read\n", test);
 	if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: name = %s\n", node->name);
@@ -150,6 +150,7 @@ Inode_t *reconstruct_tree(FILE *f) {
 			if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: case(F)\n");
 			node->children = (Inode_t **)malloc(2*sizeof(Inode_t *));
 			node->children[1] = (Inode_t *)data;
+			if(VERBOSE) printf("reconstructTree: Disk offset = %d", (int)node->children[1]);
 			break;
 		case(D):
 			if(VERBOSE) fprintf(stdout, "\nreconstruct_tree: case(D)\n");
