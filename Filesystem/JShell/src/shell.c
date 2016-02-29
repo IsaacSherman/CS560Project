@@ -177,7 +177,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "cat") == 0){
 		//cat,
-		cat(S->fs,  S->input->fields[1], stdout); 
+		cat(S->fs,  S->input->fields[1]); 
 
 	}
 	else if (strcmp(*cmd, "tree") == 0){

@@ -20,7 +20,7 @@ void secretCat(FS_t fs, char *dir_name, char *dest_name) {
 	
 	// Check children for matching filename
 	for (i=2; i<fs->cd->size+2; i++) {
-		if (!strncmp(dir_name, fs->cd->children[i], 16)) {
+		if (!strncmp(dir_name, fs->cd->children[i]->name, 16)) {
 			flag = 1;
 			break;
 		}
@@ -33,7 +33,7 @@ void secretCat(FS_t fs, char *dir_name, char *dest_name) {
 		char *DATA;
 		
 		// TODO - FIX THIS!!
-		if (fs->cd->children[i]->levels = DIRECT) {
+		if (fs->cd->children[i]->levels == DIRECT) {
 			size = fs->cd->children[i]->size;
 			f = fopen(fs->path, "r");
 			fout = fopen(dest_name, "w");

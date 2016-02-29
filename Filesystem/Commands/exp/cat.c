@@ -39,7 +39,7 @@ void cat(FS_t fs, char *dir_name) {
 			fread(DATA, sizeof(char), size, f);
 			DATA[size] = '\0';
 			
-			fprintf("%s", DATA);
+			printf("%s", DATA); 
 			
 			free(DATA);
 			fclose(f);
