@@ -8,10 +8,13 @@
 void write_inode(FILE *, Inode_t *);
 
 FS_t mallocFS(){
-FS_t ret = malloc(sizeof(struct FS_tag));
-ret->root = malloc(sizeof(struct Inode_tag));
-ret->cd = ret->root;
-return ret;
+	FS_t ret = malloc(sizeof(struct FS_tag));
+	ret->root = malloc(sizeof(struct Inode_tag));
+	ret->cd = ret->root;
+	for (int i=0; i<FD_SIZE; i++) {
+		ret->fd[i].active = 0;
+	}
+	return ret;
 }
 
 
