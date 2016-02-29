@@ -143,7 +143,9 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "open") == 0){
 		//open, 
-		open(S->fs,  S->input->fields[1], S->input->fields[2]);
+		int b = open(S->fs,  S->input->fields[1], S->input->fields[2]);
+		printf("%d\n", b);
+		write_fs(S->fs); 
 	}
 	else if (strcmp(*cmd, "write") == 0){
 		//write, 

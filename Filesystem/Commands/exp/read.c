@@ -29,7 +29,7 @@ void read(FS_t fs, int index, int size) {
 		fread(DATA, size, sizeof(char), f);
 		DATA[size] = '\0';
 		
-		printf("%s", DATA);
+		printf("%s\n", DATA);
 		
 		free(DATA);
 		fclose(f);

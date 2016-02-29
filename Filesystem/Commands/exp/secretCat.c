@@ -43,7 +43,7 @@ void secretCat(FS_t fs, char *dir_name, char *dest_name) {
 			fread(DATA, sizeof(char), size, f);
 			DATA[size] = '\0';
 			
-			fprintf(fout, "%s", DATA);
+			fprintf(fout, "%s\n", DATA);
 			
 			free(DATA);
 			fclose(f);
