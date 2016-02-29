@@ -14,7 +14,7 @@
 /*
  *
  */
-int open(FS_t fs, char *dir_name, int mode) {
+int open(FS_t fs, char *dir_name, char *mode) {
 	int flag1 = 0;
 	int flag2 = 0;
 	int fd=-1;
@@ -40,9 +40,14 @@ int open(FS_t fs, char *dir_name, int mode) {
 			fs->fd[j].active = 1;
 			fs->fd[j].file = fs->cd->children[i];
 			fs->fd[j].offset = 0;
-			fs->fd[j].mode = mode;
 			fd = j;
 			printf("SUCCESS, ");
+			
+			if (!strcmp(mode, "r")) {
+				fs->fd[j].mode = R;
+			} else {
+				fs->fd[j].mode = W;
+			}
 		}
 	}
 	
