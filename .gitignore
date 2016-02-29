@@ -46,5 +46,4 @@ Temporary Items
 *.o
 *.disk
 *.e
-*.sh
 *.a
