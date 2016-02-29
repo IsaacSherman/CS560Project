@@ -7,6 +7,6 @@
 #ifndef WRITE_H
 #define WRITE_H
 
-void write(FS_t, int, int);
+void write(FS_t, int, char*);
 
 #endif

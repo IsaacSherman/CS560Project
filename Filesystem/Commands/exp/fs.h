@@ -23,7 +23,7 @@
 #define R	0						// Used for read mode
 #define W	1						// Used for write mode
 #define DEFAULT_FS_SIZE 100*1024*1024	// 100 MB
-#define DEFAULT_PAGE_SIZE 4*1024		// 4 KB
+#define DEFAULT_PAGE_SIZE 16*1024		// 4 KB
 #define FD_SIZE	10
 
 // For debugging

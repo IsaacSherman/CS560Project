@@ -26,12 +26,12 @@ void read(FS_t fs, int index, int size) {
 		
 		fs->fd[index].offset += size;
 		
-		fread(data, size, sizeof(char), f);
-		data[size] = '\0';
+		fread(DATA, size, sizeof(char), f);
+		DATA[size] = '\0';
 		
-		printf("%s", data);
+		printf("%s", DATA);
 		
-		free(data);
+		free(DATA);
 		fclose(f);
 		
 	} else

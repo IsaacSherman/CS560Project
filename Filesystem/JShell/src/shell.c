@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <malloc.h>
 #include <sys/wait.h>
-//#include <sys/types.h>
+#include <sys/types.h>
 //#include <sys/stat.h>
 #include "myLib.h"
 #include <assert.h>
@@ -131,30 +131,29 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 			path = strdup(S->input->fields[1]);
 		}
 		else path = strdup("disk.disk");
-		printf("s->fs = %d", (int)S->fs);
-		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
 		temp = mkfs(path);
 		S->fs = temp;
 		tree(S->fs, true, true);
-		printf("S->fs = %d, temp = %d\n", (int)S->fs, (int)temp);
 		
 		free(path);
 	}
 	else if (strcmp(*cmd, "read") == 0){
 		//read, 
-	printf("read\n");
+	read(S->fs, atoi(S->input->fields[1]), atoi(S->input->fields[2]));
 	}
 	else if (strcmp(*cmd, "open") == 0){
 		//open, 
+		open(S->fs,  S->input->fields[1], S->input->fields[2]);
 	}
 	else if (strcmp(*cmd, "write") == 0){
 		//write, 
+		write(S->fs, atoi(S->input->fields[1]), S->input->fields[2]);
 	}
 	else if (strcmp(*cmd, "seek") == 0){
-		//seek, 
+		seek(S->fs, atoi(S->input->fields[1]), atoi(S->input->fields[2]));
 	}
 	else if (strcmp(*cmd, "close") == 0){
-		//close, 
+		close(S->fs, atoi(S->input->fields[1]));
 	}
 	else if (strcmp(*cmd, "mkdir") == 0){
 		mkdir(S->fs, S->input->fields[1]);
@@ -199,7 +198,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else{
 	
-	printf("Invalid option: %s, going to try to fork and exec:", *cmd);
+	printf("Invalid option: %s, going to try to fork and exec:\n", *cmd);
 	
 	Inode_t * val = find(S->fs, *cmd);
 	if(val != NULL){
@@ -208,7 +207,6 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 
 		(*argv)[i] = strdup((S->input->fields[i]));
 		if((*argv)[i][0]=='>' || (*argv)[i][0]=='<' ||(*argv)[i][0]=='|' ) special = true;  
-		printf("argv[%d] = %s\n", i, (*argv)[i]);
 		}
 		
 	argv[i] = NULL;
@@ -218,7 +216,10 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	perror("exec");
 	exit(1);
 	}
-	else return special;
+	else {
+	printf("waiting for pid = %d\n", pid);
+	wait(pid);
+	}
 	}
 	else printf("Invalid Option %s\n", *cmd);
 	}
@@ -520,19 +521,23 @@ getCommand(Shell jsh){ //returns number of words, EOF on ctrl-d
 
 void 
 prepToExec(Shell S, char * cmd, char ** argv){
+	printf("made it to preptoexec\n");
 	secretCat(S->fs, cmd, "evilmonkey");
 	int pid = fork();
+	printf("Just forked; pid = %d\n", pid);
 	if(pid == 0){
 	execlp("chmod", "evilmonkey", "+x");
 	exit(1);
 	}
 	else{
+	printf("here's the real fork()\n");
 	pid = fork();
 	if(pid==0){
 	execvp("evilmonkey", argv);
 	exit(1);
 	}
 	else{
+	printf("cleaning up\n");
 	sleep(1);
 	execlp("rm", "evilmonkey", NULL);
 	exit(1);
