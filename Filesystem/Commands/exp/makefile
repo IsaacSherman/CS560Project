@@ -32,9 +32,11 @@ clean:
 
 all: clear_screen obj
 	$(CC) $(FLAGS) $(SRC_O) $(EXEC).c -o $(EXEC).e
+	clear
 
 debug: clear_screen obj
 	$(CC) $(FLAGS) -g $(SRC_O) $(EXEC).c -o $(EXEC).e
+	clear
 	
 obj:
 	$(CC) $(FLAGS) $(SRC_C) -c
