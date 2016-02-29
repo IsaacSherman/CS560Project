@@ -175,6 +175,11 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		ls(S->fs);
 		
 	}
+	else if (strcmp(*cmd, "cat") == 0){
+		//cat,
+		cat(S->fs,  S->input->fields[1], stdout); 
+
+	}
 	else if (strcmp(*cmd, "tree") == 0){
 		//tree,
 		tree(S->fs, true, false); 
@@ -187,6 +192,8 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "export") == 0){
 		//export, 
+		secretCat(S->fs,  S->input->fields[1], S->input->fields[2]); 
+
 	}
 	else{
 	printf("Invalid option: %s, going to try to fork and exec:", *cmd);
