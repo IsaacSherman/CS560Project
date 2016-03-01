@@ -136,6 +136,11 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		//tree(S->fs, true, true);
 		
 		free(path);
+		
+		cd(S->fs, ".");
+		S->prompt = strdup("/");
+		addColonToPrompt(S);
+		
 	}
 	else if (strcmp(*cmd, "read") == 0){
 		//read, 
@@ -149,7 +154,33 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "write") == 0){
 		//write, 
-		write(S->fs, atoi(S->input->fields[1]), S->input->fields[2]);
+				int size = 0;
+		for(int i = 2; i < words; ++i){
+			size += strlen(S->input->fields[i])+1;
+			}
+			char * buf= malloc(sizeof(char)*size);
+		int counter = 0;	
+		for(int i = 2; i < words; ++i){
+		
+			for(int j = 0; j < strlen(S->input->fields[i]); ++j){
+				buf[counter++] = S->input->fields[i][j];
+				}
+				buf[counter++] = ' ';	
+			}
+		char * pass = strdup(buf);
+		int mkfsfd= atoi(S->input->fields[1]);
+		char firstChar = S->input->fields[1][0];
+		if(firstChar <'0' || firstChar > '9')
+		{//Invalid formatting
+		printf("USAGE: write <fd> <string>");
+		}
+		else
+		{
+		write(S->fs, mkfsfd, pass);
+		free(pass);
+		free(buf);
+		write_fs(S->fs);
+		}
 	}
 	else if (strcmp(*cmd, "seek") == 0){
 		seek(S->fs, atoi(S->input->fields[1]), atoi(S->input->fields[2]));

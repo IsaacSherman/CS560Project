@@ -25,7 +25,6 @@ clean:
 
 $(EXECUTABLES) : $(LIB) $(OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(LIB)
-	clear
 
 #.SUFFIXES: .c .o .a
 
@@ -33,13 +32,13 @@ $(ALLC) : $(LIB)
 	$(CC) $(CFLAGS) -c $@ -o $(basename $@).o 
 	echo ALLC: $@
 	$(CC) -c $(CFLAGS) $@
-	clear
+	
 
 #lib/f1.o:
 #	$(CC) $(CFLAGS) $(basename $@).c -o $@ $(LIB)
 $(OBJECTS) : $(ALLC)
 	echo OBJECT: $@
 	$(CC) -c $(CFLAGS) $(basename $@).c -o $@
-	clear
+	
 
 
