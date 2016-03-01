@@ -144,8 +144,24 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 	}
 	else if (strcmp(*cmd, "read") == 0){
 		//read, 
-	read(S->fs, atoi(S->input->fields[1]), atoi(S->input->fields[2]));
-	}
+		int mkfsfd= atoi(S->input->fields[1]);
+		int size2 = 0;
+		char firstChar2 = 'x';
+		if(words > 2) {
+			size2= atoi(S->input->fields[2]);
+			firstChar2 = S->input->fields[2][0];
+		}
+		char firstChar = S->input->fields[1][0];
+		if(firstChar <'0' || firstChar > '9' || 
+		firstChar2 <'0' || firstChar2 > '9' )
+		{//Invalid formatting
+		printf("USAGE: read <fd> <size>\n");
+		}
+		else
+		{
+		read(S->fs, mkfsfd, size2);
+		}
+		}
 	else if (strcmp(*cmd, "open") == 0){
 		//open, 
 		int b = open(S->fs,  S->input->fields[1], S->input->fields[2]);
@@ -172,7 +188,7 @@ parseCommand(Shell S, char ** cmd, char *** argv){
 		char firstChar = S->input->fields[1][0];
 		if(firstChar <'0' || firstChar > '9')
 		{//Invalid formatting
-		printf("USAGE: write <fd> <string>");
+		printf("USAGE: write <fd> <string>\n");
 		}
 		else
 		{
