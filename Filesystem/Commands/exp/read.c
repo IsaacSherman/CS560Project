@@ -16,7 +16,7 @@
  */
 void read(FS_t fs, int index, int size) {
 	//
-	if (index < FD_SIZE && fs->fd[index].active == 1 && fs->fd[index].mode == R) {
+	if (index >= 0 && index < FD_SIZE && fs->fd[index].active == 1 && fs->fd[index].mode == R) {
 		if (size + fs->fd[index].offset >= fs->fd[index].file->size)
 			size = fs->fd[index].file->size - fs->fd[index].offset;
 			

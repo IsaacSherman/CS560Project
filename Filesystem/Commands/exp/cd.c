@@ -51,7 +51,7 @@ void cd(FS_t fs, char *dir_name) {
 				
 			} else {
 				for (int j=2; j<searcher->size+2; j++) {
-					if (searcher->children[j]->itype != F && !strncmp(searcher->children[j]->name, dir_name+oldi, i-oldi)) {
+					if (searcher->children[j]->itype != F && !strncmp(searcher->children[j]->name, dir_name+oldi, strlen(searcher->children[j]->name))) {
 						searcher = searcher->children[j];
 						if (VERBOSE) printf("\ncd: i found a file in the path\n");
 						flag = 0;
@@ -84,7 +84,7 @@ void cd(FS_t fs, char *dir_name) {
                                                                                                                                                                                                        
         } else {
             for (int j=2; j<searcher->size+2; j++) {
-                if (searcher->children[j]->itype != F && !strncmp(searcher->children[j]->name, dir_name+oldi, i-oldi)) {
+                if (searcher->children[j]->itype != F && !strncmp(searcher->children[j]->name, dir_name+oldi, strlen(searcher->children[j]->name))) {
                     searcher = searcher->children[j];
                     if (VERBOSE) printf("\ncd: i found a file in the path\n");
                     flag = 0;

@@ -16,7 +16,7 @@
  */
 void write(FS_t fs, int index, char *string) {
 	//
-	if (index < FD_SIZE && fs->fd[index].active == 1 && fs->fd[index].mode == W) {
+	if (index >= 0 && index < FD_SIZE && fs->fd[index].active == 1 && fs->fd[index].mode == W) {
 		if (VERBOSE) printf("\nwrite: I have to write something!\n");
 	int size = strlen(string);
 		if (size + fs->fd[index].offset >= fs->page_size)
